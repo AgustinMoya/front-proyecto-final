@@ -1,5 +1,15 @@
 import React from "react";
 
-const Account = () => <span>Account</span>;
+import { PasswordForgetForm } from "../PasswordForget";
+import PasswordChangeForm from "../PasswordChange";
 
-export default Account;
+//TODO: Mostrar solo si el usuario esta logueado
+const AccountPage = () => (
+  <div>
+    <h1>Account Page</h1>
+    <PasswordForgetForm />
+    <PasswordChangeForm />
+  </div>
+);
+
+export default AccountPage;
