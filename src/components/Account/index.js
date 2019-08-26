@@ -1,15 +1,18 @@
 import React from "react";
-
+import { AuthUserContext, withAuthorization } from "../Session";
 import { PasswordForgetForm } from "../PasswordForget";
 import PasswordChangeForm from "../PasswordChange";
 
-//TODO: Mostrar solo si el usuario esta logueado
 const AccountPage = () => (
-  <div>
-    <h1>Account Page</h1>
-    <PasswordForgetForm />
-    <PasswordChangeForm />
-  </div>
+  <AuthUserContext.Consumer>
+    {authUser => (
+      <div>
+        <h1>Mi cuenta: {authUser.email}</h1>
+        <PasswordForgetForm />
+        <PasswordChangeForm />
+      </div>
+    )}
+  </AuthUserContext.Consumer>
 );
-
-export default AccountPage;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(AccountPage);
