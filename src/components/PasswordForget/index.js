@@ -57,7 +57,7 @@ class PasswordForgetFormBase extends Component {
           placeholder="Email"
         />
         <button disabled={isInvalid} type="submit">
-          Reiniciar mi contraseña
+          Recuperar mi contraseña
         </button>
 
         {error && <p>{error.message}</p>}

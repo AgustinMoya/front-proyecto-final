@@ -5,12 +5,14 @@ import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 
 import * as ROUTES from "../../constants/routes";
+import * as ROLES from "../../constants/roles";
 
 const INITIAL_STATE = {
   username: "",
   email: "",
   passwordOne: "",
   passwordTwo: "",
+  isAdmin: false,
   error: null
 };
 const SignUpPage = () => (
@@ -27,15 +29,19 @@ class SignUpFormBase extends Component {
   }
 
   onSubmit = event => {
-    const { username, email, passwordOne } = this.state;
-
+    const { username, email, passwordOne, isAdmin } = this.state;
+    const roles = {};
+    if (isAdmin) {
+      roles[ROLES.ADMIN] = ROLES.ADMIN;
+    }
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
         // Se crea el usuario en firebase database
         return this.props.firebase.user(authUser.user.uid).set({
           username,
-          email
+          email,
+          roles
         });
       })
       .then(authUser => {
@@ -52,8 +58,20 @@ class SignUpFormBase extends Component {
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
+  onChangeCheckbox = event => {
+    this.setState({ [event.target.name]: event.target.checked });
+  };
+
   render() {
-    const { username, email, passwordOne, passwordTwo, error } = this.state;
+    const {
+      username,
+      email,
+      passwordOne,
+      passwordTwo,
+      error,
+      isAdmin
+    } = this.state;
     const isInvalid =
       passwordOne !== passwordTwo ||
       passwordOne === "" ||
@@ -89,6 +107,15 @@ class SignUpFormBase extends Component {
           type="password"
           placeholder="Confirmar contraseña"
         />
+        <label>
+          Administrador:
+          <input
+            name="isAdmin"
+            type="checkbox"
+            checked={isAdmin}
+            onChange={this.onChangeCheckbox}
+          />
+        </label>
         <button disabled={isInvalid} type="submit">
           Registrarse
         </button>
