@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+
+  prod:
+    container_name: Front-Proyecto-Final-Prod
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    ports:
+      - '80:80'
+    environment:
+      - NODE_ENV=production
