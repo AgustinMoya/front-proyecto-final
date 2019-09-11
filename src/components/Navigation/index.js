@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 
 import { AuthUserContext } from "../Session";
 
 import SignOutButton from "../SignOut";
 import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
+
+import logo from "./logo-removebg-preview.png";
 
 const Navigation = () => (
   <AuthUserContext.Consumer>
@@ -16,35 +20,64 @@ const Navigation = () => (
 );
 
 const NavigationAuth = ({ authUser }) => (
-  <ul>
-    <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.HOME}>Home</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.ACCOUNT}>Account</Link>
-    </li>
-    {!!authUser.roles[ROLES.ADMIN] && (
-      <li>
-        <Link to={ROUTES.ADMIN}>Admin</Link>
-      </li>
-    )}
-    <li>
-      <SignOutButton />
-    </li>
-  </ul>
+  <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
+    <Navbar.Brand as={Link} to={ROUTES.LANDING}>
+      <img
+        src={logo}
+        width="30"
+        height="30"
+        className="d-inline-block align-top"
+        alt="React Bootstrap logo"
+      />
+    </Navbar.Brand>
+    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    <Navbar.Collapse id="responsive-navbar-nav">
+      <Nav className="mr-auto">
+        <Nav.Item>
+          <Nav.Link as={Link} to={ROUTES.HOME}>
+            Inicio
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to={ROUTES.ACCOUNT}>
+            Mi cuenta
+          </Nav.Link>
+        </Nav.Item>
+        {!!authUser.roles[ROLES.ADMIN] && (
+          <Nav.Item>
+            <Nav.Link as={Link} to={ROUTES.ADMIN}>
+              Administrador
+            </Nav.Link>
+          </Nav.Item>
+        )}
+      </Nav>
+      <Nav>
+        <Nav.Item>
+          <SignOutButton />
+        </Nav.Item>
+      </Nav>
+    </Navbar.Collapse>
+  </Navbar>
 );
 
 const NavigationNonAuth = () => (
-  <ul>
-    <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.SIGN_IN}>Ingresa</Link>
-    </li>
-  </ul>
+  <Navbar bg="dark" variant="dark">
+    <Navbar.Brand as={Link} to={ROUTES.LANDING}>
+      <img
+        src={logo}
+        width="30"
+        height="30"
+        className="d-inline-block align-top"
+        alt=""
+      />
+    </Navbar.Brand>
+    <Nav className="mr-auto">
+      <Nav.Item>
+        <Nav.Link as={Link} to={ROUTES.SIGN_IN}>
+          Ingresá
+        </Nav.Link>
+      </Nav.Item>
+    </Nav>
+  </Navbar>
 );
 export default Navigation;

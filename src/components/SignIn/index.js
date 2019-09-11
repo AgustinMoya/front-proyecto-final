@@ -1,15 +1,18 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
+import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 
 import { SignUpLink } from "../SignUp";
 import { PasswordForgetLink } from "../PasswordForget";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
 
+import "./styles.scss";
+
 const SignInPage = () => (
-  <div>
-    <h1>SignIn</h1>
+  <div className="form-signin">
     <SignInForm />
     <SignInGoogle />
     <PasswordForgetLink />
@@ -57,25 +60,41 @@ class SignInFormBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
+        <h1 className="h3 mb-3 font-weight-normal">Por favor, ingresá</h1>
+        <label htmlFor="inputEmail" className="sr-only">
+          Correo electrónico
+        </label>
         <input
+          className="form-control"
           name="email"
+          type="email"
+          placeholder="Email"
           value={email}
           onChange={this.onChange}
-          type="text"
-          placeholder="Email"
         />
+        <label htmlFor="inputPassword" className="sr-only">
+          Contraseña
+        </label>
         <input
+          className="form-control"
+          id="inputPassword"
           name="password"
-          value={password}
-          onChange={this.onChange}
           type="password"
           placeholder="Contraseña"
+          value={password}
+          onChange={this.onChange}
         />
-        <button disabled={isInvalid} type="submit">
+
+        <button
+          disabled={isInvalid}
+          className="btn btn-lg btn-primary btn-block"
+          type="submit"
+        >
           Ingresar
         </button>
+        {error && <Alert variant="danger">{error.message}</Alert>}
 
-        {error && <p>{error.message}</p>}
+        <p className="mt-5 mb-3 text-muted">© 2019-2019</p>
       </form>
     );
   }
@@ -104,9 +123,11 @@ class SignInGoogleBase extends Component {
   render() {
     const { error } = this.state;
     return (
-      <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Google</button>
-        {error && <p>{error.message}</p>}
+      <form onSubmit={this.onSubmit} className="margin-bottom">
+        <Button type="submit" variant="info">
+          Ingresar con Google
+        </Button>
+        {error && <Alert variant="danger">{error.message}</Alert>}
       </form>
     );
   }
