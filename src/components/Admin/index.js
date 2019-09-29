@@ -9,15 +9,20 @@ import { withAuthorization } from "../Session";
 import * as ROLES from "../../constants/roles";
 import Deposit from "../Deposit";
 
+const INITIAL_STATE = {
+  loading: false,
+  isLoading: false,
+  pedidos: null,
+  users: [],
+  columns: "",
+  rows: "",
+  showDeposit: false
+};
+
 class AdminPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false,
-      isLoading: false,
-      pedidos: null,
-      users: []
-    };
+    this.state = { ...INITIAL_STATE };
   }
   componentDidMount() {
     this.setState({ loading: true });
@@ -47,8 +52,30 @@ class AdminPage extends Component {
   componentWillUnmount() {
     this.props.firebase.users().off();
   }
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  createDeposit = () => {
+    this.setState({ showDeposit: true });
+  };
+  restartDeposit = () => {
+    this.setState({ showDeposit: false, rows: null, columns: null });
+  };
+
   render() {
-    const { users, pedidos, loading, isLoading } = this.state;
+    const {
+      users,
+      pedidos,
+      loading,
+      isLoading,
+      columns,
+      rows,
+      showDeposit
+    } = this.state;
+
+    const isInvalid = rows === "" || columns === "";
+
     return (
       <Fragment>
         <h1>Admin</h1>
@@ -67,8 +94,37 @@ class AdminPage extends Component {
         </Button>
         {pedidos &&
           pedidos.map((pedido, key) => <span key={key}> {pedido}</span>)}
-
-        <Deposit columns={2} rows={2} />
+        {!showDeposit && (
+          <div>
+            <input
+              className="form-control"
+              name="rows"
+              type="number"
+              placeholder="Filas"
+              value={rows}
+              onChange={this.onChange}
+            />
+            <input
+              className="form-control"
+              name="columns"
+              type="number"
+              placeholder="Columnas"
+              value={columns}
+              onChange={this.onChange}
+            />
+          </div>
+        )}
+        <button disabled={isInvalid} type="button" onClick={this.createDeposit}>
+          Crear Deposito
+        </button>
+        <button
+          disabled={isInvalid}
+          type="button"
+          onClick={this.restartDeposit}
+        >
+          Reiniciar deposito
+        </button>
+        {showDeposit && <Deposit rows={rows} columns={columns} />}
       </Fragment>
     );
   }
