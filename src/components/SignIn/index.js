@@ -11,6 +11,15 @@ import * as ROUTES from "../../constants/routes";
 
 import "./styles.scss";
 
+const ERROR_CODE_ACCOUNT_EXISTS =
+  "auth/account-exists-with-different-credential";
+
+const ERROR_MSG_ACCOUNT_EXISTS = `
+  An account with an E-Mail address to
+  this social account already exists. Try to login from
+  this account instead and associate your social accounts on
+  your personal account page.
+`;
 const SignInPage = () => (
   <div className="form-signin">
     <SignInForm />
@@ -116,6 +125,9 @@ class SignInGoogleBase extends Component {
         });
       })
       .catch(error => {
+        if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
+          error.message = ERROR_MSG_ACCOUNT_EXISTS;
+        }
         this.setState({ error });
       });
     event.preventDefault();

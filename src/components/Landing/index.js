@@ -7,8 +7,8 @@ const Landing = () => (
     <Container>
       <h1>Bienvenidos al proyecto final del Team wall-e</h1>
       <p>
-        Este es el frontend de la aplicación, usted podrá realizar diferentes acciones dependiendo
-          si es un usuario o un administrador.
+        Este es el frontend de la aplicación, usted podrá realizar diferentes
+        acciones dependiendo si es un usuario o un administrador.
       </p>
     </Container>
   </Jumbotron>

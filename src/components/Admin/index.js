@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Seatmap from 'react-seatmap';
+
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import { withAuthorization } from "../Session";
