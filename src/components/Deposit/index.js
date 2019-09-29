@@ -22,7 +22,6 @@ const Deposit = ({ columns, rows }) => {
     //TODO: Chequear
     // setMatrix((matrix[row][column] = flag));
     matrix[row][column] = flag;
-    console.log(matrix);
   };
 
   const createDeposit = (row, column) => {
