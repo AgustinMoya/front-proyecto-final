@@ -79,7 +79,6 @@ class AdminPage extends Component {
     return (
       <Fragment>
         <h1>Admin</h1>
-
         <p>
           La página de administrador es visible por todos los usuarios
           <b>ADMINISTRADORES</b> logueados

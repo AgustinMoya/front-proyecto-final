@@ -15,13 +15,15 @@
 .clearfix {
   clear: both;
 }
-.available {
+.free {
   background-color: #96c131;
 }
-
-.hovering {
-  background-color: sandybrown;
-}
-.selected {
+.tower {
   background-color: brown;
+}
+.initial {
+  background-color: lightblue;
+}
+.blocked {
+  background-color: grey;
 }

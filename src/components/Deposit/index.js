@@ -52,31 +52,36 @@ const Deposit = ({ columns, rows }) => {
 };
 
 const Estante = ({ row, column, handleClick }) => {
-  const [activeSelected, setSelected] = useState(false);
-  const [activeHover, setHover] = useState(false);
+  const [count, setCount] = useState(0);
 
   const toggleSelected = () => {
-    setSelected(!activeSelected);
-    handleClick(row, column, !activeSelected ? 1 : 0);
-  };
-  const onMouseEnter = () => {
-    setHover(true);
-  };
-  const onMouseLeave = () => {
-    setHover(false);
+    if (count === 3) {
+      setCount(0);
+    } else {
+      setCount(count + 1);
+    }
   };
 
+  const selected = () => {
+    handleClick(row, column, count);
+    switch (count) {
+      case 1:
+        return "tower";
+      case 2:
+        return "initial";
+      case 3:
+        return "blocked";
+      default:
+        return "free";
+    }
+  };
   return (
     <div
       key={column}
-      onClick={toggleSelected}
-      className={classnames(
-        "seat available",
-        activeSelected ? "selected" : null,
-        activeHover ? "hovering" : null
-      )}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onClick={() => {
+        toggleSelected();
+      }}
+      className={classnames("seat", selected())}
     />
   );
 };
