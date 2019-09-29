@@ -14,14 +14,13 @@ import AdminPage from "../Admin";
 import { withAuthentication } from "../Session";
 
 import * as ROUTES from "../../constants/routes";
+import styles from "../../index.scss";
 
 const App = () => (
   <Router>
-    <div>
-      <Navigation />
+    <Navigation />
 
-      <hr />
-
+    <div className="margin">
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route path={ROUTES.SIGN_IN} component={SignInPage} />

@@ -3,12 +3,14 @@ import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import Image from "react-bootstrap/Image";
 
 import { SignUpLink } from "../SignUp";
 import { PasswordForgetLink } from "../PasswordForget";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
 
+import logo from "./Logo grande 3.PNG";
 import "./styles.scss";
 
 const ERROR_CODE_ACCOUNT_EXISTS =
@@ -22,6 +24,7 @@ const ERROR_MSG_ACCOUNT_EXISTS = `
 `;
 const SignInPage = () => (
   <div className="form-signin">
+    <Image src={logo} fluid />
     <SignInForm />
     <SignInGoogle />
     <PasswordForgetLink />

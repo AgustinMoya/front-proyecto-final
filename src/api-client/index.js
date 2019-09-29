@@ -3,8 +3,8 @@ import axios from "axios";
 class ApiClient {
   constructor() {
     this.client = axios.create({
-      baseURL: "http://localhost:5000",
-      timeout: 5000
+      baseURL: 'http://localhost:5000',
+      timeout: 4000,
     });
   }
 

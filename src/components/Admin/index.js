@@ -1,16 +1,21 @@
-import React, { Component } from "react";
-import Seatmap from 'react-seatmap';
+import React, { Component, Fragment } from "react";
+import ListGroup from "react-bootstrap/ListGroup";
 
+import Button from "react-bootstrap/Button";
+import ApiClient from "../../api-client/index";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import { withAuthorization } from "../Session";
 import * as ROLES from "../../constants/roles";
+import Deposit from "../Deposit";
 
 class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
+      isLoading: false,
+      pedidos: null,
       users: []
     };
   }
@@ -29,28 +34,49 @@ class AdminPage extends Component {
     });
   }
 
+  getAllPedidos = () => {
+    this.setState({ isLoading: true });
+    ApiClient.getAllPedidos().then(({ data }) => {
+      this.setState({
+        isLoading: false,
+        pedidos: data.Message
+      });
+    });
+  };
+
   componentWillUnmount() {
     this.props.firebase.users().off();
   }
   render() {
-    const { users, loading } = this.state;
+    const { users, pedidos, loading, isLoading } = this.state;
     return (
-      <div>
+      <Fragment>
         <h1>Admin</h1>
+
         <p>
           La página de administrador es visible por todos los usuarios
           <b>ADMINISTRADORES</b> logueados
         </p>
         {loading && <div>Loading ...</div>}
         <UserList users={users} />
-      </div>
+        <Button
+          disabled={isLoading}
+          onClick={!isLoading ? this.getAllPedidos : null}
+        >
+          {isLoading ? "Cargando…" : "Obtener todos los pedidos"}
+        </Button>
+        {pedidos &&
+          pedidos.map((pedido, key) => <span key={key}> {pedido}</span>)}
+
+        <Deposit columns={2} rows={2} />
+      </Fragment>
     );
   }
 }
 const UserList = ({ users }) => (
-  <ul>
+  <ListGroup>
     {users.map(user => (
-      <li key={user.uid}>
+      <ListGroup.Item key={user.uid}>
         <span>
           <strong>ID:</strong> {user.uid}
         </span>
@@ -60,11 +86,12 @@ const UserList = ({ users }) => (
         <span>
           <strong>Nombre de usuario:</strong> {user.username}
         </span>
-      </li>
+      </ListGroup.Item>
     ))}
-  </ul>
+  </ListGroup>
 );
 const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN];
+
 export default compose(
   withAuthorization(condition),
   withFirebase
