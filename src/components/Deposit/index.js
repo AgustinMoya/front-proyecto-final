@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import classnames from "classnames";
 
@@ -22,6 +22,7 @@ const Deposit = ({ columns, rows }) => {
     //TODO: Chequear
     // setMatrix((matrix[row][column] = flag));
     matrix[row][column] = flag;
+    console.log(matrix);
   };
 
   const createDeposit = (row, column) => {
@@ -61,8 +62,11 @@ const Estante = ({ row, column, handleClick }) => {
     }
   };
 
-  const selected = () => {
+  useEffect(() => {
     handleClick(row, column, count);
+  }, [count]);
+
+  const selected = () => {
     switch (count) {
       case 1:
         return "tower";
