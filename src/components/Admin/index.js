@@ -1,9 +1,10 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
 
 import Button from "react-bootstrap/Button";
 import ApiClient from "../../api-client/index";
@@ -22,7 +23,9 @@ const INITIAL_STATE = {
   users: [],
   columns: "",
   rows: "",
-  showDeposit: false
+  showDeposit: false,
+  code: null,
+  message: null
 };
 
 class AdminPage extends Component {
@@ -69,6 +72,15 @@ class AdminPage extends Component {
     this.setState({ showDeposit: false, rows: null, columns: null });
   };
 
+  confirmDeposit = matrix => {
+    ApiClient.confirmMatrix(matrix).then(({ data }) => {
+      this.setState({
+        code: data.Status,
+        message: data.Message
+      });
+    });
+  };
+
   render() {
     const {
       users,
@@ -77,11 +89,12 @@ class AdminPage extends Component {
       isLoading,
       columns,
       rows,
-      showDeposit
+      showDeposit,
+      code,
+      message
     } = this.state;
 
     const isInvalid = rows === "" || columns === "";
-
     return (
       <Container>
         <Row>
@@ -156,17 +169,34 @@ class AdminPage extends Component {
             />
           </div>
         )}
-        <Button disabled={isInvalid} type="button" onClick={this.createDeposit}>
+        <Button
+          disabled={isInvalid}
+          variant="info"
+          type="button"
+          onClick={this.createDeposit}
+        >
           Crear Deposito
         </Button>
         <Button
           disabled={isInvalid}
           type="button"
+          variant="warning"
           onClick={this.restartDeposit}
         >
           Reiniciar deposito
         </Button>
-        {showDeposit && <Deposit rows={rows} columns={columns} />}
+        {showDeposit && (
+          <Deposit
+            rows={rows}
+            columns={columns}
+            confirmDeposit={this.confirmDeposit}
+          />
+        )}
+        {code === 200 ? (
+          <Alert variant="success"> {this.state.message}</Alert>
+        ) : code === 500 ? (
+          <Alert variant="danger">{this.state.message}</Alert>
+        ) : null}
       </Container>
     );
   }

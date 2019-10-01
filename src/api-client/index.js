@@ -3,8 +3,8 @@ import axios from "axios";
 class ApiClient {
   constructor() {
     this.client = axios.create({
-      baseURL: 'http://localhost:5000',
-      timeout: 4000,
+      baseURL: "http://localhost:5000",
+      timeout: 4000
     });
   }
 
@@ -12,7 +12,8 @@ class ApiClient {
     getPedidoActual: "/verpedidoactual",
     getAllPedidos: "/vertodospedidos",
     cancelPedido: "/cancelarpedido",
-    queuePedido: "/encolarpedido"
+    queuePedido: "/encolarpedido",
+    confirmMatrix: "/receivematrix"
   };
 
   getPedido() {
@@ -29,8 +30,19 @@ class ApiClient {
       }
     });
   }
+  confirmMatrix(matrix) {
+    return this.client.post(
+      this.endpoints.confirmMatrix,
+      { matrix: matrix },
+      {
+        headers: {
+          "Content-type": "application/json"
+        }
+      }
+    );
+  }
   queuePedido(pedido) {
-    return this.client.post(this.endpoints.cancelPedido, pedido, {
+    return this.client.post(this.endpoints.queuePedido, pedido, {
       headers: {
         "Content-type": "application/json"
       }

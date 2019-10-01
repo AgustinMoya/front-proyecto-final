@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 
 import Estante from "../Estante";
 import styles from "./styles.scss";
+import Button from "react-bootstrap/Button";
 
 const initialMatrix = (columns, rows) => {
   let matrix = [];
@@ -14,7 +15,7 @@ const initialMatrix = (columns, rows) => {
   return matrix;
 };
 
-const Deposit = ({ columns, rows }) => {
+const Deposit = ({ columns, rows, confirmDeposit }) => {
   const [matrix, setMatrix] = useState(initialMatrix(columns, rows));
 
   const updateMatrix = (row, column, flag) => {
@@ -44,9 +45,18 @@ const Deposit = ({ columns, rows }) => {
   };
 
   return (
-    <div className="messagePanel">
-      {createDeposit(rows, columns).map(estante => estante)}
-    </div>
+    <Fragment>
+      <div className="messagePanel">
+        {createDeposit(rows, columns).map(estante => estante)}
+      </div>
+      <Button
+        type="button"
+        variant="success"
+        onClick={() => confirmDeposit(matrix)}
+      >
+        Confirmar depósito
+      </Button>
+    </Fragment>
   );
 };
 
