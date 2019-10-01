@@ -1,5 +1,9 @@
 import React, { Component, Fragment } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
+import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Spinner from "react-bootstrap/Spinner";
 
 import Button from "react-bootstrap/Button";
 import ApiClient from "../../api-client/index";
@@ -8,6 +12,8 @@ import { withFirebase } from "../Firebase";
 import { withAuthorization } from "../Session";
 import * as ROLES from "../../constants/roles";
 import Deposit from "../Deposit";
+
+import styles from "./styles.scss";
 
 const INITIAL_STATE = {
   loading: false,
@@ -77,22 +83,59 @@ class AdminPage extends Component {
     const isInvalid = rows === "" || columns === "";
 
     return (
-      <Fragment>
-        <h1>Admin</h1>
-        <p>
-          La página de administrador es visible por todos los usuarios
-          <b>ADMINISTRADORES</b> logueados
-        </p>
-        {loading && <div>Loading ...</div>}
+      <Container>
+        <Row>
+          <Col xs={12}>
+            <h1>Admin</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <p>
+              La página de administrador es visible por todos los usuarios
+              administradores logueados
+            </p>
+          </Col>
+        </Row>
+
+        {loading && (
+          <Row className="loader marginTop">
+            <Col xs={12}>
+              <Spinner animation="border" />
+            </Col>
+          </Row>
+        )}
         <UserList users={users} />
-        <Button
-          disabled={isLoading}
-          onClick={!isLoading ? this.getAllPedidos : null}
-        >
-          {isLoading ? "Cargando…" : "Obtener todos los pedidos"}
-        </Button>
+
+        <Row className="marginTop">
+          <Col xs={12}>
+            <Button
+              variant="primary"
+              onClick={!isLoading ? this.getAllPedidos : null}
+              disabled={isLoading}
+            >
+              {isLoading && (
+                <Spinner
+                  as="span"
+                  animation="grow"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              )}
+              {isLoading ? "Cargando…" : "Obtener todos los pedidos"}
+            </Button>
+          </Col>
+        </Row>
         {pedidos &&
-          pedidos.map((pedido, key) => <span key={key}> {pedido}</span>)}
+          pedidos.map((pedido, index) => (
+            <Row className="marginTop" key={index}>
+              <Col xs={12}>
+                <p>El pedido es: {pedido}</p>
+              </Col>
+            </Row>
+          ))}
+
         {!showDeposit && (
           <div>
             <input
@@ -113,37 +156,39 @@ class AdminPage extends Component {
             />
           </div>
         )}
-        <button disabled={isInvalid} type="button" onClick={this.createDeposit}>
+        <Button disabled={isInvalid} type="button" onClick={this.createDeposit}>
           Crear Deposito
-        </button>
-        <button
+        </Button>
+        <Button
           disabled={isInvalid}
           type="button"
           onClick={this.restartDeposit}
         >
           Reiniciar deposito
-        </button>
+        </Button>
         {showDeposit && <Deposit rows={rows} columns={columns} />}
-      </Fragment>
+      </Container>
     );
   }
 }
 const UserList = ({ users }) => (
-  <ListGroup>
-    {users.map(user => (
-      <ListGroup.Item key={user.uid}>
-        <span>
-          <strong>ID:</strong> {user.uid}
-        </span>
-        <span>
-          <strong>E-Mail:</strong> {user.email}
-        </span>
-        <span>
-          <strong>Nombre de usuario:</strong> {user.username}
-        </span>
-      </ListGroup.Item>
-    ))}
-  </ListGroup>
+  <Container>
+    <Row as={ListGroup}>
+      {users.map(user => (
+        <Col xs={12} as={ListGroup.Item} key={user.uid}>
+          <p>
+            <strong>ID:</strong> {user.uid}
+          </p>
+          <p>
+            <strong>E-Mail:</strong> {user.email}
+          </p>
+          <p>
+            <strong>Nombre de usuario:</strong> {user.username}
+          </p>
+        </Col>
+      ))}
+    </Row>
+  </Container>
 );
 const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN];
 
