@@ -238,7 +238,6 @@ class AdminPage extends Component {
               this.uploadInput = ref;
             }}
             onChange={e => this.handleCsv(e)}
-            className="csv-input"
             type="file"
             accept=".csv, text/csv"
             id={"csv"}
