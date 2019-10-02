@@ -27,6 +27,12 @@ const INITIAL_STATE = {
   code: null,
   message: null
 };
+const leyendas = [
+  { color: "free", description: "Posicion libre" },
+  { color: "initial", description: "Posicion inicial" },
+  { color: "tower", description: "Estante" },
+  { color: "blocked", description: "Columna o pared" }
+];
 
 class AdminPage extends Component {
   constructor(props) {
@@ -186,11 +192,28 @@ class AdminPage extends Component {
           Reiniciar deposito
         </Button>
         {showDeposit && (
-          <Deposit
-            rows={rows}
-            columns={columns}
-            confirmDeposit={this.confirmDeposit}
-          />
+          <Row className="marginTop">
+            <Col xs={12} md={12}>
+              <h4>Leyenda: </h4>
+              <div className="inlineGrid">
+                {leyendas.map((leyenda, idx) => {
+                  return (
+                    <div key={idx}>
+                      <div className={`seat ${leyenda.color}`} />
+                      <p>{leyenda.description}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </Col>
+            <Col xs={12} md={6}>
+              <Deposit
+                rows={rows}
+                columns={columns}
+                confirmDeposit={this.confirmDeposit}
+              />
+            </Col>
+          </Row>
         )}
         {code === 200 ? (
           <Alert variant="success"> {this.state.message}</Alert>
