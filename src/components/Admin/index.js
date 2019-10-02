@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
+import CSVReader from "react-csv-reader";
 
 import Button from "react-bootstrap/Button";
 import ApiClient from "../../api-client/index";
@@ -80,6 +81,16 @@ class AdminPage extends Component {
 
   confirmDeposit = matrix => {
     ApiClient.confirmMatrix(matrix).then(({ data }) => {
+      this.setState({
+        code: data.Status,
+        message: data.Message
+      });
+    });
+  };
+
+  handleCsv = e => {
+    e.preventDefault();
+    ApiClient.receiveCsv(this.uploadInput.files[0]).then(({ data }) => {
       this.setState({
         code: data.Status,
         message: data.Message
@@ -220,6 +231,19 @@ class AdminPage extends Component {
         ) : code === 500 ? (
           <Alert variant="danger">{this.state.message}</Alert>
         ) : null}
+        <div>
+          <label htmlFor="csv">Insertar el csv</label>
+          <input
+            ref={ref => {
+              this.uploadInput = ref;
+            }}
+            onChange={e => this.handleCsv(e)}
+            className="csv-input"
+            type="file"
+            accept=".csv, text/csv"
+            id={"csv"}
+          />
+        </div>
       </Container>
     );
   }

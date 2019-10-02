@@ -13,7 +13,8 @@ class ApiClient {
     getAllPedidos: "/vertodospedidos",
     cancelPedido: "/cancelarpedido",
     queuePedido: "/encolarpedido",
-    confirmMatrix: "/receivematrix"
+    confirmMatrix: "/receivematrix",
+    receiveCsv: "/receiveCsv",
   };
 
   getPedido() {
@@ -37,6 +38,17 @@ class ApiClient {
       {
         headers: {
           "Content-type": "application/json"
+        }
+      }
+    );
+  }
+  receiveCsv(file) {
+    return this.client.post(
+      this.endpoints.receiveCsv,
+      file,
+      {
+        headers: {
+          "Content-type": "multipart/form-data"
         }
       }
     );
