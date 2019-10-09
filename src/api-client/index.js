@@ -14,7 +14,7 @@ class ApiClient {
     cancelPedido: "/cancelarpedido",
     queuePedido: "/encolarpedido",
     confirmMatrix: "/receivematrix",
-    receiveCsv: "/receiveCsv",
+    receiveCsv: "/insertcsv",
   };
 
   getPedido() {
@@ -48,7 +48,7 @@ class ApiClient {
       file,
       {
         headers: {
-          "Content-type": "multipart/form-data"
+          "Content-type": "multipart/form-data; boundary=--------------------------375771206255746189715309"
         }
       }
     );

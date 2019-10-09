@@ -90,7 +90,9 @@ class AdminPage extends Component {
 
   handleCsv = e => {
     e.preventDefault();
-    ApiClient.receiveCsv(this.uploadInput.files[0]).then(({ data }) => {
+    const data = new FormData();
+    data.append('file', this.uploadInput.files[0]);
+    ApiClient.receiveCsv(data).then(({ data }) => {
       this.setState({
         code: data.Status,
         message: data.Message
