@@ -48,7 +48,7 @@ class ApiClient {
       file,
       {
         headers: {
-          "Content-type": "multipart/form-data; boundary=--------------------------375771206255746189715309"
+          "Content-type": "multipart/form-data"
         }
       }
     );

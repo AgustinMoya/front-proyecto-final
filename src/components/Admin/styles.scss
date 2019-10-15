@@ -8,3 +8,15 @@
 .inlineGrid {
   display: inline-flex;
 }
+
+.borderTabs {
+  border: .2rem solid #ececec;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.scrollList {
+  height: 300px;
+  overflow: auto;
+  display: block;
+}

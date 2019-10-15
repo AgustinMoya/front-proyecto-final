@@ -50,6 +50,7 @@ const Deposit = ({ columns, rows, confirmDeposit }) => {
         {createDeposit(rows, columns).map(estante => estante)}
       </div>
       <Button
+        className="marginTop"
         type="button"
         variant="success"
         onClick={() => confirmDeposit(matrix)}
