@@ -61,6 +61,8 @@ class AdminPage extends Component {
   getAllPedidos = () => {
     this.setState({ isLoading: true });
     ApiClient.getAllPedidos().then(({ data }) => {
+
+      console.log("Los productos son: ",data.Message);
       this.setState({
         isLoading: false,
         pedidos: data.Message
@@ -195,7 +197,11 @@ class AdminPage extends Component {
                   pedidos.map((pedido, index) => (
                     <Row className="marginTop" key={index}>
                       <Col xs={12}>
-                        <p>El pedido es: {pedido}</p>
+                        <p>El id del pedido es:{pedido.id}</p>
+                        <p>La orden de compra es: {pedido.id_orden_compra}</p>
+                        <p>El id de articulo es: {pedido.id_articulo}</p>
+                        <p>El pedido es: {pedido.name}</p>
+                        <p>El estado es: {pedido.estado}</p>
                       </Col>
                     </Row>
                   ))}
