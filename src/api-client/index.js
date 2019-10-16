@@ -10,7 +10,7 @@ class ApiClient {
 
   endpoints = {
     getPedidoActual: "/verpedidoactual",
-    getAllPedidos: "/vertodospedidos",
+    getAllPedidos: "/getpedidos",
     cancelPedido: "/cancelarpedido",
     queuePedido: "/encolarpedido",
     confirmMatrix: "/receivematrix",

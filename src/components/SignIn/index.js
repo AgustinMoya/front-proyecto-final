@@ -139,7 +139,7 @@ class SignInGoogleBase extends Component {
     const { error } = this.state;
     return (
       <form onSubmit={this.onSubmit} className="margin-bottom">
-        <Button type="submit" variant="info">
+        <Button type="submit" variant="info" disabled>
           Ingresar con Google
         </Button>
         {error && <Alert variant="danger">{error.message}</Alert>}
