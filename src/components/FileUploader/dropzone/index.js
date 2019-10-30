@@ -77,7 +77,6 @@ class Dropzone extends Component {
           onChange={this.onFilesAdded}
           accept=".csv"
         />
-        <span>Subir archivos</span>
       </div>
     );
   }

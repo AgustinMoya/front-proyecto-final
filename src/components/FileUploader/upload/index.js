@@ -58,7 +58,7 @@ class Upload extends Component {
           disabled={this.state.files.length < 0 || this.state.uploading}
           onClick={this.uploadFiles}
         >
-          Subir archivo
+          Importar
         </button>
       );
     }

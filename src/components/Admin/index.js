@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
@@ -14,10 +15,15 @@ import { withFirebase } from "../Firebase";
 import { withAuthorization } from "../Session";
 import * as ROLES from "../../constants/roles";
 
-import styles from "./styles.scss";
 import Deposit from "../Deposit";
 import Alert from "react-bootstrap/Alert";
 import FileUploader from "../FileUploader";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import styles from "./styles.scss";
 
 const INITIAL_STATE = {
   loading: false,
@@ -30,10 +36,24 @@ const INITIAL_STATE = {
   code: null,
   message: null
 };
+const columnTable = [
+  {
+    dataField: "uid",
+    text: "ID de usuario"
+  },
+  {
+    dataField: "username",
+    text: "Nombre de usuario"
+  },
+  {
+    dataField: "email",
+    text: "Email"
+  }
+];
 const leyendas = [
   { color: "free", description: "Posicion libre" },
-  { color: "initial", description: "Posicion inicial" },
-  { color: "tower", description: "Estante" },
+  { color: "initial", description: "Plataforma de descarga" },
+  { color: "tower", description: "Torre de producto" },
   { color: "blocked", description: "Columna o pared" }
 ];
 
@@ -43,7 +63,7 @@ class AdminPage extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  getAllUsers = () => {
+  componentDidMount() {
     this.setState({ loading: true });
     this.props.firebase.users().on("value", snapshot => {
       const usersObject = snapshot.val();
@@ -56,13 +76,12 @@ class AdminPage extends Component {
         loading: false
       });
     });
-  };
+  }
 
   getAllPedidos = () => {
     this.setState({ isLoading: true });
     ApiClient.getAllPedidos().then(({ data }) => {
-
-      console.log("Los productos son: ",data.Message);
+      console.log("Los productos son: ", data.Message);
       this.setState({
         isLoading: false,
         pedidos: data.Message
@@ -137,7 +156,7 @@ class AdminPage extends Component {
           </Col>
         </Row>
         <Row className="borderTabs">
-          <Col sm={3}>
+          <Col sm={3} className="borderRight">
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
                 <Nav.Link eventKey="usuarios">Usuarios</Nav.Link>
@@ -146,35 +165,40 @@ class AdminPage extends Component {
                 <Nav.Link eventKey="pedidos">Pedidos</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="crearDeposito">Crear Deposito</Nav.Link>
+                <Nav.Link eventKey="crearDeposito">Crear deposito</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="files">Insertar archivos</Nav.Link>
+                <Nav.Link eventKey="files">Importar productos</Nav.Link>
               </Nav.Item>
             </Nav>
           </Col>
-          <Col sm={9}>
+          <Col sm={9} className="marginAuto">
             <Tab.Content>
               <Tab.Pane eventKey="usuarios">
-                {users.length === 0 && (
-                  <Button
-                    variant="outline-dark"
-                    onClick={this.getAllUsers}
-                    disabled={loading}
-                  >
-                    {loading && (
-                      <Spinner
-                        as="span"
-                        animation="grow"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                      />
-                    )}
-                    {loading ? "Cargando…" : "Obtener todos los usuarios"}
-                  </Button>
+                {users.length === 0 ? (
+                  <center>
+                    <Button variant="outline-dark" disabled={loading}>
+                      {loading && (
+                        <Spinner
+                          as="span"
+                          animation="grow"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                      )}
+                      {loading ? "Cargando…" : "Obtener todos los usuarios"}
+                    </Button>
+                  </center>
+                ) : (
+                  <BootstrapTable
+                    bootstrap4
+                    keyField="uid"
+                    data={users}
+                    columns={columnTable}
+                    pagination={paginationFactory()}
+                  />
                 )}
-                <UserList users={users} />
               </Tab.Pane>
               <Tab.Pane eventKey="pedidos">
                 <Button
@@ -209,6 +233,7 @@ class AdminPage extends Component {
               <Tab.Pane eventKey="crearDeposito">
                 {!showDeposit && (
                   <div>
+                    <h5>Cantidad Filas</h5>
                     <input
                       className="form-control"
                       name="rows"
@@ -217,8 +242,9 @@ class AdminPage extends Component {
                       value={rows}
                       onChange={this.onChange}
                     />
+                    <h5 className="marginTop">Cantidad Columnas</h5>
                     <input
-                      className="form-control marginTop"
+                      className="form-control"
                       name="columns"
                       type="number"
                       placeholder="Columnas"

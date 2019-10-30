@@ -14,6 +14,7 @@ const Landing = () => (
         </p>
       </Container>
     </Jumbotron>
+    <ControlledCarousel/>
   </Fragment>
 );
 
