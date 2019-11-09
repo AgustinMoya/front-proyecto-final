@@ -114,8 +114,8 @@ const OrdersTable = ({ orders }) => (
       <div>
         <h3>Listado de pedidos</h3>
         <p>
-          Las columnas: <bold>nombre de producto</bold>,
-          <bold>orden de compra</bold> y <bold>ID de robot</bold> son filtrables
+          Las columnas: nombre de producto, orden de compra y ID de robot son
+          filtrables
         </p>
         <div style={{ display: "table-caption" }}>
           <SearchBar

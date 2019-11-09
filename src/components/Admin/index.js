@@ -83,20 +83,30 @@ class AdminPage extends Component {
   };
 
   confirmDeposit = matrix => {
-    ApiClient.confirmMatrix(matrix).then(({ data }) => {
+    ApiClient.confirmMatrix(matrix).then(data => {
+      console.log(data);
       this.setState({
-        code: data.Status,
+        code: 200,
         message: data.Message
       });
     });
   };
 
-  validateDeposit = () => {
-    ApiClient.validateDeposit().then(({ data }) => {
-      this.setState({
-        message: data.Message
+  validateMatrix = matrix => {
+    ApiClient.validateMatrix(matrix)
+      .then(({ data }) => {
+        this.setState({
+          message: data.Message,
+          code: 200
+        });
+      })
+      .catch(e => {
+        console.log(e.response.data.Message, e.response.status);
+        this.setState({
+          message: e.response.data.Message,
+          code: e.response.status
+        });
       });
-    });
   };
   handleCsv = e => {
     e.preventDefault();
@@ -244,7 +254,7 @@ class AdminPage extends Component {
                             columns={columns}
                             confirmDeposit={this.confirmDeposit}
                             restartDeposit={this.restartDeposit}
-                            validateDeposit={this.validateDeposit}
+                            validateDeposit={this.validateMatrix}
                           />
                         </Col>
                         <Col xs={12} md={6}>
@@ -261,11 +271,15 @@ class AdminPage extends Component {
                         </Col>
                       </Row>
                     )}
-                    {code === 200 ? (
-                      <Alert variant='success'>{message}</Alert>
-                    ) : code === 500 ? (
-                      <Alert variant='danger'>{message}</Alert>
-                    ) : null}
+                    <Row style={{ marginTop: "20px" }}>
+                      <Col xs={6}>
+                        {code => 200 && code < 300 ? (
+                          <Alert variant='success'>{message}</Alert>
+                        ) : code === 500 ? (
+                          <Alert variant='danger'>{message}</Alert>
+                        ) : null}
+                      </Col>
+                    </Row>
                   </Tab.Pane>
                   <Tab.Pane eventKey='files'>
                     <FileUploader />

@@ -3,6 +3,8 @@ import React, { Fragment, useState } from "react";
 import Estante from "../Estante";
 import styles from "./styles.scss";
 import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const initialMatrix = (columns, rows) => {
   let matrix = [];
@@ -15,7 +17,13 @@ const initialMatrix = (columns, rows) => {
   return matrix;
 };
 
-const Deposit = ({ columns, rows, confirmDeposit, restartDeposit, validateDeposit }) => {
+const Deposit = ({
+  columns,
+  rows,
+  confirmDeposit,
+  restartDeposit,
+  validateDeposit
+}) => {
   const [matrix, setMatrix] = useState(initialMatrix(columns, rows));
 
   const updateMatrix = (row, column, flag) => {
@@ -48,34 +56,41 @@ const Deposit = ({ columns, rows, confirmDeposit, restartDeposit, validateDeposi
       <div className='messagePanel'>
         {createDeposit(rows, columns).map(estante => estante)}
       </div>
-      <div style={{display:"inline-flex"}}>
-      <Button
-        className='marginTop'
-        type='button'
-        variant='success'
-        onClick={() => confirmDeposit(matrix)}
-      >
-        Confirmar depósito
-      </Button>
-      <Button
-        style={{ marginLeft: "15px" }}
-        className='marginTop'
-        type='button'
-        variant='warning'
-        onClick={() => restartDeposit()}
-      >
-        Reiniciar deposito
-      </Button>
-      <Button
-        style={{ marginLeft: "15px" }}
-        className='marginTop'
-        type='button'
-        variant='info'
-        onClick={() => validateDeposit()}
-      >
-        Validar deposito
-      </Button>
-      </div>
+      <Row>
+        <Col>
+          <Button
+            style={{ width: "100%" }}
+            className='marginTop'
+            type='button'
+            variant='success'
+            onClick={() => confirmDeposit(matrix)}
+          >
+            Confirmar depósito
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            style={{ width: "100%" }}
+            className='marginTop'
+            type='button'
+            variant='warning'
+            onClick={() => restartDeposit()}
+          >
+            Reiniciar deposito
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            style={{ width: "100%" }}
+            className='marginTop'
+            type='button'
+            variant='info'
+            onClick={() => validateDeposit(matrix)}
+          >
+            Validar deposito
+          </Button>
+        </Col>
+      </Row>
     </Fragment>
   );
 };

@@ -40,6 +40,17 @@ class ApiClient {
       }
     );
   }
+  validateMatrix(matrix) {
+    return this.client.post(
+      this.endpoints.validateMatrix,
+      { matrix: matrix },
+      {
+        headers: {
+          "Content-type": "application/json"
+        }
+      }
+    );
+  }
   insertCsv(file) {
     return this.client.post(
       this.endpoints.insertCsv,
