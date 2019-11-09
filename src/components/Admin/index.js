@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 
-import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
-import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
@@ -18,11 +16,8 @@ import * as ROLES from "../../constants/roles";
 import Deposit from "../Deposit";
 import Alert from "react-bootstrap/Alert";
 import FileUploader from "../FileUploader";
-import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory from "react-bootstrap-table2-paginator";
 
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import UserTable from '../Table/Users'
 import styles from "./styles.scss";
 
 const INITIAL_STATE = {
@@ -36,20 +31,7 @@ const INITIAL_STATE = {
   code: null,
   message: null
 };
-const columnTable = [
-  {
-    dataField: "uid",
-    text: "ID de usuario"
-  },
-  {
-    dataField: "username",
-    text: "Nombre de usuario"
-  },
-  {
-    dataField: "email",
-    text: "Email"
-  }
-];
+
 const leyendas = [
   { color: "free", description: "Posicion libre" },
   { color: "initial", description: "Plataforma de descarga" },
@@ -97,9 +79,9 @@ class AdminPage extends Component {
   };
 
   createDeposit = () => {
-    console.log(this.state.rows, this.state.columns);
     this.setState({ showDeposit: true });
   };
+
   restartDeposit = () => {
     this.setState({ showDeposit: false, rows: null, columns: null });
   };
@@ -141,7 +123,7 @@ class AdminPage extends Component {
     const isInvalid =
       rows === "" && rows === 0 && (columns === "" && columns === 0);
     return (
-      <Tab.Container id="left-tabs-example" defaultActiveKey="usuarios">
+      <Tab.Container id='left-tabs-example' defaultActiveKey='usuarios'>
         <Row>
           <Col sm={12}>
             <h1>Admin</h1>
@@ -155,71 +137,65 @@ class AdminPage extends Component {
             </p>
           </Col>
         </Row>
-        <Row className="borderTabs">
-          <Col sm={3} className="borderRight">
-            <Nav variant="pills" className="flex-column">
+        <Row className='borderTabs'>
+          <Col sm={3} className='borderRight'>
+            <Nav variant='pills' className='flex-column'>
               <Nav.Item>
-                <Nav.Link eventKey="usuarios">Usuarios</Nav.Link>
+                <Nav.Link eventKey='usuarios'>Usuarios</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="pedidos">Pedidos</Nav.Link>
+                <Nav.Link eventKey='pedidos'>Pedidos</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="crearDeposito">Crear deposito</Nav.Link>
+                <Nav.Link eventKey='crearDeposito'>Crear deposito</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="files">Importar productos</Nav.Link>
+                <Nav.Link eventKey='files'>Importar productos</Nav.Link>
               </Nav.Item>
             </Nav>
           </Col>
-          <Col sm={9} className="marginAuto">
+          <Col sm={9} className='marginAuto'>
             <Tab.Content>
-              <Tab.Pane eventKey="usuarios">
+              <Tab.Pane eventKey='usuarios'>
                 {users.length === 0 ? (
                   <center>
-                    <Button variant="outline-dark" disabled={loading}>
+                    <Button variant='outline-dark' disabled={loading}>
                       {loading && (
                         <Spinner
-                          as="span"
-                          animation="grow"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
+                          as='span'
+                          animation='grow'
+                          size='sm'
+                          role='status'
+                          aria-hidden='true'
                         />
                       )}
                       {loading ? "Cargando…" : "Obtener todos los usuarios"}
                     </Button>
                   </center>
                 ) : (
-                  <BootstrapTable
-                    bootstrap4
-                    keyField="uid"
-                    data={users}
-                    columns={columnTable}
-                    pagination={paginationFactory()}
-                  />
+                  <UserTable users={users}/>
                 )}
               </Tab.Pane>
-              <Tab.Pane eventKey="pedidos">
+              <Tab.Pane eventKey='pedidos'>
                 <Button
-                  variant="outline-info"
+                  variant='outline-info'
                   onClick={!isLoading ? this.getAllPedidos : null}
                   disabled={isLoading}
                 >
                   {isLoading && (
                     <Spinner
-                      as="span"
-                      animation="grow"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
+                      as='span'
+                      animation='grow'
+                      size='sm'
+                      role='status'
+                      aria-hidden='true'
                     />
                   )}
                   {isLoading ? "Cargando…" : "Obtener todos los pedidos"}
                 </Button>
                 {pedidos &&
                   pedidos.map((pedido, index) => (
-                    <Row className="marginTop" key={index}>
+                    <Row className='marginTop' key={index}>
                       <Col xs={12}>
                         <p>El id del pedido es:{pedido.id}</p>
                         <p>La orden de compra es: {pedido.id_orden_compra}</p>
@@ -230,32 +206,32 @@ class AdminPage extends Component {
                     </Row>
                   ))}
               </Tab.Pane>
-              <Tab.Pane eventKey="crearDeposito">
+              <Tab.Pane eventKey='crearDeposito'>
                 {!showDeposit && (
                   <div>
                     <h5>Cantidad Filas</h5>
                     <input
-                      className="form-control"
-                      name="rows"
-                      type="number"
-                      placeholder="Filas"
+                      className='form-control'
+                      name='rows'
+                      type='number'
+                      placeholder='Filas'
                       value={rows}
                       onChange={this.onChange}
                     />
-                    <h5 className="marginTop">Cantidad Columnas</h5>
+                    <h5 className='marginTop'>Cantidad Columnas</h5>
                     <input
-                      className="form-control"
-                      name="columns"
-                      type="number"
-                      placeholder="Columnas"
+                      className='form-control'
+                      name='columns'
+                      type='number'
+                      placeholder='Columnas'
                       value={columns}
                       onChange={this.onChange}
                     />
                     <Button
-                      className="marginTop"
+                      className='marginTop'
                       disabled={isInvalid}
-                      variant="info"
-                      type="button"
+                      variant='info'
+                      type='button'
                       onClick={this.createDeposit}
                     >
                       Crear Deposito
@@ -265,20 +241,20 @@ class AdminPage extends Component {
                 {showDeposit && (
                   <Button
                     style={{ marginLeft: "15px" }}
-                    className="marginTop"
+                    className='marginTop'
                     disabled={isInvalid}
-                    type="button"
-                    variant="warning"
+                    type='button'
+                    variant='warning'
                     onClick={this.restartDeposit}
                   >
                     Reiniciar deposito
                   </Button>
                 )}
                 {showDeposit && (
-                  <Row className="marginTop">
+                  <Row className='marginTop'>
                     <Col xs={12} md={12}>
                       <h4>Leyenda: </h4>
-                      <div className="inlineGrid">
+                      <div className='inlineGrid'>
                         {leyendas.map((leyenda, idx) => {
                           return (
                             <div key={idx}>
@@ -299,12 +275,12 @@ class AdminPage extends Component {
                   </Row>
                 )}
                 {code === 200 ? (
-                  <Alert variant="success">{this.state.message}</Alert>
+                  <Alert variant='success'>{this.state.message}</Alert>
                 ) : code === 500 ? (
-                  <Alert variant="danger">{this.state.message}</Alert>
+                  <Alert variant='danger'>{this.state.message}</Alert>
                 ) : null}
               </Tab.Pane>
-              <Tab.Pane eventKey="files">
+              <Tab.Pane eventKey='files'>
                 <FileUploader />
               </Tab.Pane>
             </Tab.Content>
@@ -315,31 +291,6 @@ class AdminPage extends Component {
   }
 }
 
-const UserList = ({ users }) =>
-  users.length > 0 && (
-    <Container className={"overflow-auto"}>
-      <Row>
-        <Col sm={12}>
-          <h3>Los usuarios registrados son:</h3>
-        </Col>
-      </Row>
-      <Row as={ListGroup} variant="flush" className="scrollList">
-        {users.map(user => (
-          <Col xs={12} as={ListGroup.Item} key={user.uid}>
-            <p>
-              <strong>ID:</strong> {user.uid}
-            </p>
-            <p>
-              <strong>E-Mail:</strong> {user.email}
-            </p>
-            <p>
-              <strong>Nombre de usuario:</strong> {user.username}
-            </p>
-          </Col>
-        ))}
-      </Row>
-    </Container>
-  );
 const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN];
 
 export default compose(

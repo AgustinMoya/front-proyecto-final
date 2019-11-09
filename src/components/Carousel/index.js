@@ -1,32 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import Carousel from "react-bootstrap/Carousel";
 import arduino from "./Arduino.jpeg";
 import logo from "./Logo grande 3.PNG";
+import prueba from "./Logo Chico2.png";
+import styles from "./styles.css";
 
 const ControlledCarousel = () => {
-  const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(null);
-
-  const handleSelect = (selectedIndex, e) => {
-    setIndex(selectedIndex);
-    setDirection(e.direction);
-  };
-
   return (
-    <Carousel activeIndex={index} direction={direction} onSelect={handleSelect} style={{ color: 'black' }}>
-      <Carousel.Item>
-        <img className="d-block w-100" src={logo} alt="First slide" height="300" width="100%"/>
-        <Carousel.Caption>
-          <h3>Team wall-e</h3>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img className="d-block w-100" src={arduino} alt="Second slide" height="300" width="100%" />
-        <Carousel.Caption>
-          <h3>Powered by:</h3>
-        </Carousel.Caption>
-      </Carousel.Item>
-    </Carousel>
+      <Carousel className="carousel">
+        <Carousel.Item>
+          <img className='d-block w-100' src={prueba} alt='First slide' />
+          <Carousel.Caption>
+            <h3>Equipo wall-e</h3>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img className='d-block w-100' src={prueba} alt='Second slide' />
+          <Carousel.Caption>
+            <h3>Arduino</h3>
+          </Carousel.Caption>
+        </Carousel.Item>
+      </Carousel>
   );
 };
 

@@ -5,6 +5,9 @@
 .marginTop {
   margin-top: 15px;
 }
+.marginLeft{
+  margin-left: 10px;
+}
 .inlineGrid {
   display: inline-flex;
 }
@@ -27,4 +30,15 @@
 
 .marginAuto {
   margin: auto;
+}
+.columnColor {
+  background-color:#fff;
+}
+.headerColor {
+   background-color: #343a40!important;
+  //background-color: #6c757d;
+  color: white
+}
+.paginationItem {
+  padding: 6px 12px;
 }
