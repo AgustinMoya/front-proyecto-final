@@ -83,8 +83,7 @@ class AdminPage extends Component {
   };
 
   confirmDeposit = matrix => {
-    ApiClient.confirmMatrix(matrix).then(data => {
-      console.log(data);
+    ApiClient.confirmMatrix(matrix).then(({ data }) => {
       this.setState({
         code: 200,
         message: data.Message
@@ -272,8 +271,8 @@ class AdminPage extends Component {
                       </Row>
                     )}
                     <Row style={{ marginTop: "20px" }}>
-                      <Col xs={6}>
-                        {code => 200 && code < 300 ? (
+                      <Col xs={12}>
+                        {code >= 200 && code < 300 ? (
                           <Alert variant='success'>{message}</Alert>
                         ) : code === 500 ? (
                           <Alert variant='danger'>{message}</Alert>
