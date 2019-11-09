@@ -15,14 +15,13 @@ const initialMatrix = (columns, rows) => {
   return matrix;
 };
 
-const Deposit = ({ columns, rows, confirmDeposit }) => {
+const Deposit = ({ columns, rows, confirmDeposit, restartDeposit, validateDeposit }) => {
   const [matrix, setMatrix] = useState(initialMatrix(columns, rows));
 
   const updateMatrix = (row, column, flag) => {
     //TODO: Chequear
     // setMatrix((matrix[row][column] = flag));
     matrix[row][column] = flag;
-    console.log(matrix);
   };
 
   const createDeposit = (row, column) => {
@@ -36,7 +35,7 @@ const Deposit = ({ columns, rows, confirmDeposit }) => {
         depositValue.push(seatingStyle);
 
         if (j === column - 1) {
-          const seatClear = <div className="clearfix" />;
+          const seatClear = <div className='clearfix' />;
           depositValue.push(seatClear);
         }
       }
@@ -46,17 +45,37 @@ const Deposit = ({ columns, rows, confirmDeposit }) => {
 
   return (
     <Fragment>
-      <div className="messagePanel">
+      <div className='messagePanel'>
         {createDeposit(rows, columns).map(estante => estante)}
       </div>
+      <div style={{display:"inline-flex"}}>
       <Button
-        className="marginTop"
-        type="button"
-        variant="success"
+        className='marginTop'
+        type='button'
+        variant='success'
         onClick={() => confirmDeposit(matrix)}
       >
         Confirmar depósito
       </Button>
+      <Button
+        style={{ marginLeft: "15px" }}
+        className='marginTop'
+        type='button'
+        variant='warning'
+        onClick={() => restartDeposit()}
+      >
+        Reiniciar deposito
+      </Button>
+      <Button
+        style={{ marginLeft: "15px" }}
+        className='marginTop'
+        type='button'
+        variant='info'
+        onClick={() => validateDeposit()}
+      >
+        Validar deposito
+      </Button>
+      </div>
     </Fragment>
   );
 };

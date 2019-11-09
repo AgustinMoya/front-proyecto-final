@@ -111,7 +111,7 @@ class Upload extends Component {
       const formData = new FormData();
       formData.append("file", file, file.name);
 
-      req.open("POST", "http://localhost:5000/insertcsv");
+      req.open("POST", "http://localhost:5000/v1/articulos/csv");
       req.send(formData);
     });
   };

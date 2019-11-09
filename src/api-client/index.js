@@ -10,12 +10,11 @@ class ApiClient {
 
   endpoints = {
     getAllPedidos: "/v1/pedidos/all",
-
-    getPedidoActual: "/verpedidoactual",
-    cancelPedido: "/cancelarpedido",
-    queuePedido: "/encolarpedido",
-    confirmMatrix: "/receivematrix",
-    receiveCsv: "/insertcsv",
+    getPedido: "/v1/pedidos", //TODO: Query params
+    deletePedido: (id) => `/v1/pedidos/${id}`,
+    createMatrix: '/v1/matrix', //TODO: POST
+    validateMatrix: '/v1/matrix/validate', //TODO: POST
+    insertCsv: "/v1/articulos/csv", //TODO: POST
   };
 
   getAllPedidos() {
@@ -23,19 +22,16 @@ class ApiClient {
   }
 
   getPedido() {
+    //TODO: Faltan los query params q se van a mandar
     return this.client.get(this.endpoints.getPedidoActual);
   }
-
-  cancelPedido(pedido) {
-    return this.client.post(this.endpoints.cancelPedido, pedido, {
-      headers: {
-        "Content-type": "application/json"
-      }
-    });
+  deletePedido(id) {
+    return this.client.delete(this.endpoints.deletePedido(id));
   }
+
   confirmMatrix(matrix) {
     return this.client.post(
-      this.endpoints.confirmMatrix,
+      this.endpoints.createMatrix,
       { matrix: matrix },
       {
         headers: {
@@ -44,9 +40,9 @@ class ApiClient {
       }
     );
   }
-  receiveCsv(file) {
+  insertCsv(file) {
     return this.client.post(
-      this.endpoints.receiveCsv,
+      this.endpoints.insertCsv,
       file,
       {
         headers: {

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Tab from "react-bootstrap/Tab";
@@ -10,7 +9,7 @@ import Spinner from "react-bootstrap/Spinner";
 import ApiClient from "../../api-client/index";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
-import { withAuthorization } from "../Session";
+import { AuthUserContext, withAuthorization } from "../Session";
 import * as ROLES from "../../constants/roles";
 
 import Deposit from "../Deposit";
@@ -47,7 +46,7 @@ class AdminPage extends Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true, isLoading:true });
+    this.setState({ loading: true, isLoading: true });
     this.props.firebase.users().on("value", snapshot => {
       const usersObject = snapshot.val();
       const usersList = Object.keys(usersObject).map(key => ({
@@ -92,11 +91,18 @@ class AdminPage extends Component {
     });
   };
 
+  validateDeposit = () => {
+    ApiClient.validateDeposit().then(({ data }) => {
+      this.setState({
+        message: data.Message
+      });
+    });
+  };
   handleCsv = e => {
     e.preventDefault();
     const data = new FormData();
     data.append("file", this.uploadInput.files[0]);
-    ApiClient.receiveCsv(data).then(({ data }) => {
+    ApiClient.insertCsv(data).then(({ data }) => {
       this.setState({
         code: data.Status,
         message: data.Message
@@ -117,163 +123,159 @@ class AdminPage extends Component {
       message
     } = this.state;
 
-    const isInvalid =
-      rows === "" && rows === 0 && (columns === "" && columns === 0);
     return (
-      <Tab.Container id='left-tabs-example' defaultActiveKey='usuarios'>
-        <Row>
-          <Col sm={12}>
-            <h1>Admin</h1>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
-            <p>
-              La página de administrador es visible por todos los usuarios
-              administradores logueados
-            </p>
-          </Col>
-        </Row>
-        <Row className='borderTabs'>
-          <Col sm={3} className='borderRight'>
-            <Nav variant='pills' className='flex-column'>
-              <Nav.Item>
-                <Nav.Link eventKey='usuarios'>Usuarios</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey='pedidos'>Pedidos</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey='crearDeposito'>Crear deposito</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey='files'>Importar productos</Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Col>
-          <Col sm={9} className='marginAuto'>
-            <Tab.Content>
-              <Tab.Pane eventKey='usuarios'>
-                {users.length === 0 ? (
-                  <center>
-                    <Button variant='outline-dark' disabled={loading}>
-                      {loading && (
-                        <Spinner
-                          as='span'
-                          animation='grow'
-                          size='sm'
-                          role='status'
-                          aria-hidden='true'
+      <AuthUserContext.Consumer>
+        {authUser => (
+          <Tab.Container id='left-tabs-example' defaultActiveKey='usuarios'>
+            <Row>
+              <Col sm={12}>
+                <h1>Administrador: {authUser.username}</h1>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12}>
+                <p>
+                  Esta es la pagina de administrador donde podra realizar
+                  diferentes acciones
+                </p>
+              </Col>
+            </Row>
+            <Row className='borderTabs'>
+              <Col sm={3} className='borderRight'>
+                <Nav variant='pills' className='flex-column'>
+                  <Nav.Item>
+                    <Nav.Link eventKey='usuarios'>Usuarios</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey='pedidos'>Pedidos</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey='crearDeposito'>Deposito</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey='files'>Productos</Nav.Link>
+                  </Nav.Item>
+                </Nav>
+              </Col>
+              <Col sm={9} className='marginAuto'>
+                <Tab.Content>
+                  <Tab.Pane eventKey='usuarios'>
+                    {users.length === 0 ? (
+                      <center>
+                        <Button variant='outline-dark' disabled={loading}>
+                          {loading && (
+                            <Spinner
+                              as='span'
+                              animation='grow'
+                              size='sm'
+                              role='status'
+                              aria-hidden='true'
+                            />
+                          )}
+                          {loading ? "Cargando…" : "Obtener todos los usuarios"}
+                        </Button>
+                      </center>
+                    ) : (
+                      <UserTable users={users} />
+                    )}
+                  </Tab.Pane>
+                  <Tab.Pane eventKey='pedidos'>
+                    {pedidos.length === 0 ? (
+                      <center>
+                        <Button variant='outline-dark' disabled={loading}>
+                          {isLoading && (
+                            <Spinner
+                              as='span'
+                              animation='grow'
+                              size='sm'
+                              role='status'
+                              aria-hidden='true'
+                            />
+                          )}
+                          {isLoading
+                            ? "Cargando…"
+                            : "Obtener todos los pedidos"}
+                        </Button>
+                      </center>
+                    ) : (
+                      <OrdersTable orders={pedidos} />
+                    )}
+                  </Tab.Pane>
+                  <Tab.Pane eventKey='crearDeposito'>
+                    {!showDeposit && (
+                      <div>
+                        <h5>Cantidad Filas</h5>
+                        <input
+                          className='form-control'
+                          name='rows'
+                          type='number'
+                          placeholder='Filas'
+                          value={rows}
+                          onChange={this.onChange}
                         />
-                      )}
-                      {loading ? "Cargando…" : "Obtener todos los usuarios"}
-                    </Button>
-                  </center>
-                ) : (
-                  <UserTable users={users} />
-                )}
-              </Tab.Pane>
-              <Tab.Pane eventKey='pedidos'>
-                {pedidos.length === 0 ? (
-                  <center>
-                    <Button variant='outline-dark' disabled={loading}>
-                      {isLoading && (
-                        <Spinner
-                          as='span'
-                          animation='grow'
-                          size='sm'
-                          role='status'
-                          aria-hidden='true'
+                        <h5 className='marginTop'>Cantidad Columnas</h5>
+                        <input
+                          className='form-control'
+                          name='columns'
+                          type='number'
+                          placeholder='Columnas'
+                          value={columns}
+                          onChange={this.onChange}
                         />
-                      )}
-                      {isLoading ? "Cargando…" : "Obtener todos los pedidos"}
-                    </Button>
-                  </center>
-                ) : (
-                  <OrdersTable orders={pedidos} />
-                )}
-              </Tab.Pane>
-              <Tab.Pane eventKey='crearDeposito'>
-                {!showDeposit && (
-                  <div>
-                    <h5>Cantidad Filas</h5>
-                    <input
-                      className='form-control'
-                      name='rows'
-                      type='number'
-                      placeholder='Filas'
-                      value={rows}
-                      onChange={this.onChange}
-                    />
-                    <h5 className='marginTop'>Cantidad Columnas</h5>
-                    <input
-                      className='form-control'
-                      name='columns'
-                      type='number'
-                      placeholder='Columnas'
-                      value={columns}
-                      onChange={this.onChange}
-                    />
-                    <Button
-                      className='marginTop'
-                      disabled={isInvalid}
-                      variant='info'
-                      type='button'
-                      onClick={this.createDeposit}
-                    >
-                      Crear Deposito
-                    </Button>
-                  </div>
-                )}
-                {showDeposit && (
-                  <Button
-                    style={{ marginLeft: "15px" }}
-                    className='marginTop'
-                    disabled={isInvalid}
-                    type='button'
-                    variant='warning'
-                    onClick={this.restartDeposit}
-                  >
-                    Reiniciar deposito
-                  </Button>
-                )}
-                {showDeposit && (
-                  <Row className='marginTop'>
-                    <Col xs={12} md={12}>
-                      <h4>Leyenda: </h4>
-                      <div className='inlineGrid'>
-                        {leyendas.map((leyenda, idx) => {
-                          return (
-                            <div key={idx}>
-                              <div className={`seat ${leyenda.color}`} />
-                              <p>{leyenda.description}</p>
-                            </div>
-                          );
-                        })}
+                        <Button
+                          className='marginTop'
+                          variant='success'
+                          type='button'
+                          onClick={this.createDeposit}
+                        >
+                          Crear Deposito
+                        </Button>
                       </div>
-                    </Col>
-                    <Col xs={12} md={6}>
-                      <Deposit
-                        rows={rows}
-                        columns={columns}
-                        confirmDeposit={this.confirmDeposit}
-                      />
-                    </Col>
-                  </Row>
-                )}
-                {code === 200 ? (
-                  <Alert variant='success'>{this.state.message}</Alert>
-                ) : code === 500 ? (
-                  <Alert variant='danger'>{this.state.message}</Alert>
-                ) : null}
-              </Tab.Pane>
-              <Tab.Pane eventKey='files'>
-                <FileUploader />
-              </Tab.Pane>
-            </Tab.Content>
-          </Col>
-        </Row>
-      </Tab.Container>
+                    )}
+
+                    {showDeposit && (
+                      <Row className='marginTop'>
+                        <Col xs={12}>
+                          <h4>Leyenda: </h4>
+                        </Col>
+                        <Col xs={12} md={6}>
+                          <Deposit
+                            rows={rows}
+                            columns={columns}
+                            confirmDeposit={this.confirmDeposit}
+                            restartDeposit={this.restartDeposit}
+                            validateDeposit={this.validateDeposit}
+                          />
+                        </Col>
+                        <Col xs={12} md={6}>
+                          <div>
+                            {leyendas.map((leyenda, idx) => {
+                              return (
+                                <div key={idx}>
+                                  <div className={`seat ${leyenda.color}`} />
+                                  <p>{leyenda.description}</p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </Col>
+                      </Row>
+                    )}
+                    {code === 200 ? (
+                      <Alert variant='success'>{message}</Alert>
+                    ) : code === 500 ? (
+                      <Alert variant='danger'>{message}</Alert>
+                    ) : null}
+                  </Tab.Pane>
+                  <Tab.Pane eventKey='files'>
+                    <FileUploader />
+                  </Tab.Pane>
+                </Tab.Content>
+              </Col>
+            </Row>
+          </Tab.Container>
+        )}
+      </AuthUserContext.Consumer>
     );
   }
 }

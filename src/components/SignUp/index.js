@@ -19,12 +19,8 @@ const INITIAL_STATE = {
 const ERROR_CODE_ACCOUNT_EXISTS = "auth/email-already-in-use";
 
 const ERROR_MSG_ACCOUNT_EXISTS = `
-  An account with this E-Mail address already exists.
-  Try to login with this account instead. If you think the
-  account is already used from one of the social logins, try
-  to sign-in with one of them. Afterward, associate your accounts
-  on your personal account page.
-`;
+Ya existe una cuenta con esta dirección de correo electrónico.
+Intenta iniciar sesión con esta cuenta.`;
 const SignUpPage = () => (
   <div>
     <h1>Registrate</h1>
@@ -93,43 +89,43 @@ class SignUpFormBase extends Component {
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          name="username"
+          name='username'
           value={username}
           onChange={this.onChange}
-          type="text"
-          placeholder="Nombre completo"
+          type='text'
+          placeholder='Nombre completo'
         />
         <input
-          name="email"
+          name='email'
           value={email}
           onChange={this.onChange}
-          type="text"
-          placeholder="Email"
+          type='text'
+          placeholder='Email'
         />
         <input
-          name="passwordOne"
+          name='passwordOne'
           value={passwordOne}
           onChange={this.onChange}
-          type="password"
-          placeholder="Contraseña"
+          type='password'
+          placeholder='Contraseña'
         />
         <input
-          name="passwordTwo"
+          name='passwordTwo'
           value={passwordTwo}
           onChange={this.onChange}
-          type="password"
-          placeholder="Confirmar contraseña"
+          type='password'
+          placeholder='Confirmar contraseña'
         />
         <label>
           Administrador:
           <input
-            name="isAdmin"
-            type="checkbox"
+            name='isAdmin'
+            type='checkbox'
             checked={isAdmin}
             onChange={this.onChangeCheckbox}
           />
         </label>
-        <button disabled={isInvalid} type="submit">
+        <button disabled={isInvalid} type='submit'>
           Registrarse
         </button>
 
