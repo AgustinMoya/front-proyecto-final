@@ -36,7 +36,7 @@ const customTotal = (from, to, size) => (
 
 const tableOptions = users => ({
   paginationSize: 4,
-  pageStartIndex: 0,
+  pageStartIndex: 1,
   // alwaysShowAllBtns: true, // Always show next and previous button
   // withFirstAndLast: false, // Hide the going to First and Last page button
   // hideSizePerPage: true, // Hide the sizePerPage dropdown always

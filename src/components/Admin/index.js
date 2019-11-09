@@ -17,13 +17,14 @@ import Deposit from "../Deposit";
 import Alert from "react-bootstrap/Alert";
 import FileUploader from "../FileUploader";
 
-import UserTable from '../Table/Users'
+import UserTable from "../Table/Users";
+import OrdersTable from "../Table/Orders";
 import styles from "./styles.scss";
 
 const INITIAL_STATE = {
   loading: false,
   isLoading: false,
-  pedidos: null,
+  pedidos: [],
   users: [],
   columns: "",
   rows: "",
@@ -46,7 +47,7 @@ class AdminPage extends Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
+    this.setState({ loading: true, isLoading:true });
     this.props.firebase.users().on("value", snapshot => {
       const usersObject = snapshot.val();
       const usersList = Object.keys(usersObject).map(key => ({
@@ -57,19 +58,15 @@ class AdminPage extends Component {
         users: usersList,
         loading: false
       });
-    });
-  }
-
-  getAllPedidos = () => {
-    this.setState({ isLoading: true });
-    ApiClient.getAllPedidos().then(({ data }) => {
-      console.log("Los productos son: ", data.Message);
-      this.setState({
-        isLoading: false,
-        pedidos: data.Message
+      this.setState({ isLoading: true });
+      ApiClient.getAllPedidos().then(({ data }) => {
+        this.setState({
+          isLoading: false,
+          pedidos: data
+        });
       });
     });
-  };
+  }
 
   componentWillUnmount() {
     this.props.firebase.users().off();
@@ -173,38 +170,28 @@ class AdminPage extends Component {
                     </Button>
                   </center>
                 ) : (
-                  <UserTable users={users}/>
+                  <UserTable users={users} />
                 )}
               </Tab.Pane>
               <Tab.Pane eventKey='pedidos'>
-                <Button
-                  variant='outline-info'
-                  onClick={!isLoading ? this.getAllPedidos : null}
-                  disabled={isLoading}
-                >
-                  {isLoading && (
-                    <Spinner
-                      as='span'
-                      animation='grow'
-                      size='sm'
-                      role='status'
-                      aria-hidden='true'
-                    />
-                  )}
-                  {isLoading ? "Cargando…" : "Obtener todos los pedidos"}
-                </Button>
-                {pedidos &&
-                  pedidos.map((pedido, index) => (
-                    <Row className='marginTop' key={index}>
-                      <Col xs={12}>
-                        <p>El id del pedido es:{pedido.id}</p>
-                        <p>La orden de compra es: {pedido.id_orden_compra}</p>
-                        <p>El id de articulo es: {pedido.id_articulo}</p>
-                        <p>El pedido es: {pedido.name}</p>
-                        <p>El estado es: {pedido.estado}</p>
-                      </Col>
-                    </Row>
-                  ))}
+                {pedidos.length === 0 ? (
+                  <center>
+                    <Button variant='outline-dark' disabled={loading}>
+                      {isLoading && (
+                        <Spinner
+                          as='span'
+                          animation='grow'
+                          size='sm'
+                          role='status'
+                          aria-hidden='true'
+                        />
+                      )}
+                      {isLoading ? "Cargando…" : "Obtener todos los pedidos"}
+                    </Button>
+                  </center>
+                ) : (
+                  <OrdersTable orders={pedidos} />
+                )}
               </Tab.Pane>
               <Tab.Pane eventKey='crearDeposito'>
                 {!showDeposit && (

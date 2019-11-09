@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Dropzone from "../dropzone/index";
 import Progress from "../progressBar/index";
-import ApiClient from "../../../api-client/index";
 import "./upload.css";
 
 import logoIcon from "./check_circle-24px.svg";

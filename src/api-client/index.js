@@ -9,21 +9,23 @@ class ApiClient {
   }
 
   endpoints = {
+    getAllPedidos: "/v1/pedidos/all",
+
     getPedidoActual: "/verpedidoactual",
-    getAllPedidos: "/getpedidos",
     cancelPedido: "/cancelarpedido",
     queuePedido: "/encolarpedido",
     confirmMatrix: "/receivematrix",
     receiveCsv: "/insertcsv",
   };
 
+  getAllPedidos() {
+    return this.client.get(this.endpoints.getAllPedidos);
+  }
+
   getPedido() {
     return this.client.get(this.endpoints.getPedidoActual);
   }
 
-  getAllPedidos() {
-    return this.client.get(this.endpoints.getAllPedidos);
-  }
   cancelPedido(pedido) {
     return this.client.post(this.endpoints.cancelPedido, pedido, {
       headers: {
