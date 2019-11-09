@@ -261,7 +261,10 @@ class AdminPage extends Component {
                             {leyendas.map((leyenda, idx) => {
                               return (
                                 <div key={idx}>
-                                  <div className={`seat ${leyenda.color}`} />
+                                  <div
+                                    className={`seat ${leyenda.color}`}
+                                    style={{ marginRight: "10px" }}
+                                  />
                                   <p>{leyenda.description}</p>
                                 </div>
                               );
