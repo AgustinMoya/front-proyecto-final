@@ -15,6 +15,7 @@ class ApiClient {
     getAllPlatforms: "/v1/plataforma/all",
     createMatrix: "/v1/matrix", //TODO: POST
     validateMatrix: "/v1/matrix/validate", //TODO: POST
+    getMatrix: "/v1/matrix", //TODO: GET
     insertCsv: "/v1/articulos/csv" //TODO: POST
   };
 
@@ -26,11 +27,14 @@ class ApiClient {
     return this.client.get(this.endpoints.getAllPlatforms);
   }
   getPedido(idPlataforma) {
-    console.log(this.endpoints.getPedido(idPlataforma));
     return this.client.get(this.endpoints.getPedido(idPlataforma));
   }
   deletePedido(id) {
     return this.client.delete(this.endpoints.deletePedido(id));
+  }
+
+  getMatrix() {
+    return this.client.get(this.endpoints.getMatrix);
   }
 
   confirmMatrix(matrix) {
@@ -44,6 +48,7 @@ class ApiClient {
       }
     );
   }
+
   validateMatrix(matrix) {
     return this.client.post(
       this.endpoints.validateMatrix,

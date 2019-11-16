@@ -22,13 +22,12 @@ const Deposit = ({
   rows,
   confirmDeposit,
   restartDeposit,
-  validateDeposit
+  validateDeposit,
+  clickeable = false
 }) => {
   const [matrix, setMatrix] = useState(initialMatrix(columns, rows));
 
   const updateMatrix = (row, column, flag) => {
-    //TODO: Chequear
-    // setMatrix((matrix[row][column] = flag));
     matrix[row][column] = flag;
   };
 
@@ -43,7 +42,7 @@ const Deposit = ({
         depositValue.push(seatingStyle);
 
         if (j === column - 1) {
-          const seatClear = <div className='clearfix' />;
+          const seatClear = <div className="clearfix" />;
           depositValue.push(seatClear);
         }
       }
@@ -53,16 +52,16 @@ const Deposit = ({
 
   return (
     <Fragment>
-      <div className='messagePanel'>
+      <div className="messagePanel">
         {createDeposit(rows, columns).map(estante => estante)}
       </div>
       <Row>
         <Col>
           <Button
             style={{ width: "100%" }}
-            className='marginTop'
-            type='button'
-            variant='success'
+            className="marginTop"
+            type="button"
+            variant="success"
             onClick={() => confirmDeposit(matrix)}
           >
             Confirmar depósito
@@ -71,9 +70,9 @@ const Deposit = ({
         <Col>
           <Button
             style={{ width: "100%" }}
-            className='marginTop'
-            type='button'
-            variant='warning'
+            className="marginTop"
+            type="button"
+            variant="warning"
             onClick={() => restartDeposit()}
           >
             Reiniciar deposito
@@ -82,9 +81,9 @@ const Deposit = ({
         <Col>
           <Button
             style={{ width: "100%" }}
-            className='marginTop'
-            type='button'
-            variant='info'
+            className="marginTop"
+            type="button"
+            variant="info"
             onClick={() => validateDeposit(matrix)}
           >
             Validar deposito
