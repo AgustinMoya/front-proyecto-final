@@ -8,7 +8,10 @@ import Image from "react-bootstrap/Image";
 import { SignUpLink } from "../SignUp";
 import { PasswordForgetLink } from "../PasswordForget";
 import { withFirebase } from "../Firebase";
+import { withPlatformValue } from "../Platform/context";
 import * as ROUTES from "../../constants/routes";
+
+import ApiClient from "../../api-client/index";
 
 import logo from "./Logo grande 3.PNG";
 import "./styles.scss";
@@ -17,11 +20,8 @@ const ERROR_CODE_ACCOUNT_EXISTS =
   "auth/account-exists-with-different-credential";
 
 const ERROR_MSG_ACCOUNT_EXISTS = `
-  An account with an E-Mail address to
-  this social account already exists. Try to login from
-  this account instead and associate your social accounts on
-  your personal account page.
-`;
+Una cuenta con una dirección de correo electronico para esta cuenta social ya existe.`;
+
 const SignInPage = () => (
   <div className="form-signin">
     <Image src={logo} fluid />
@@ -35,6 +35,8 @@ const SignInPage = () => (
 const INITIAL_STATE = {
   email: "",
   password: "",
+  platform: "Seleccionar plataforma",
+  platforms: [],
   error: null
 };
 
@@ -45,13 +47,22 @@ class SignInFormBase extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
+  componentDidMount() {
+    ApiClient.getAllPlatforms().then(({ data }) => {
+      this.setState({
+        platforms: data
+      });
+    });
+  }
   onSubmit = event => {
-    const { email, password } = this.state;
+    const { email, password, platform } = this.state;
 
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
+        this.props.setPlatformValue(platform);
+        localStorage.setItem("platform", platform);
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
@@ -66,9 +77,10 @@ class SignInFormBase extends Component {
   };
 
   render() {
-    const { email, password, error } = this.state;
+    const { email, password, platform, platforms, error } = this.state;
 
-    const isInvalid = password === "" || email === "";
+    const isInvalid =
+      password === "" || email === "" || platform === "Seleccionar plataforma";
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -96,13 +108,24 @@ class SignInFormBase extends Component {
           value={password}
           onChange={this.onChange}
         />
-
+        <select
+          className="custom-select margin-bottom"
+          name="platform"
+          value={platform}
+          onChange={this.onChange}
+        >
+          <option disabled>Seleccionar plataforma</option>
+          {platforms.map(platform => (
+            <option value={platform.id}>{platform.id}</option>
+          ))}
+        </select>
         <button
           disabled={isInvalid}
           className="btn btn-lg btn-primary btn-block"
           type="submit"
+          style={{padding:"initial"}}
         >
-          Ingresar
+          <span>Ingresar</span>
         </button>
         {error && <Alert variant="danger">{error.message}</Alert>}
 
@@ -150,12 +173,14 @@ class SignInGoogleBase extends Component {
 
 const SignInForm = compose(
   withRouter,
-  withFirebase
+  withFirebase,
+  withPlatformValue
 )(SignInFormBase);
 
 const SignInGoogle = compose(
   withRouter,
-  withFirebase
+  withFirebase,
+  withPlatformValue
 )(SignInGoogleBase);
 
 export default SignInPage;

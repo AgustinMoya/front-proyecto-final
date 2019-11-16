@@ -10,20 +10,24 @@ class ApiClient {
 
   endpoints = {
     getAllPedidos: "/v1/pedidos/all",
-    getPedido: "/v1/pedidos", //TODO: Query params
-    deletePedido: (id) => `/v1/pedidos/${id}`,
-    createMatrix: '/v1/matrix', //TODO: POST
-    validateMatrix: '/v1/matrix/validate', //TODO: POST
-    insertCsv: "/v1/articulos/csv", //TODO: POST
+    getPedido: idPlataforma => `/v1/pedidos?id_plataforma=${idPlataforma}`, //TODO: Query params
+    deletePedido: id => `/v1/pedidos/${id}`,
+    getAllPlatforms: "/v1/plataforma/all",
+    createMatrix: "/v1/matrix", //TODO: POST
+    validateMatrix: "/v1/matrix/validate", //TODO: POST
+    insertCsv: "/v1/articulos/csv" //TODO: POST
   };
 
   getAllPedidos() {
     return this.client.get(this.endpoints.getAllPedidos);
   }
 
-  getPedido() {
-    //TODO: Faltan los query params q se van a mandar
-    return this.client.get(this.endpoints.getPedidoActual);
+  getAllPlatforms() {
+    return this.client.get(this.endpoints.getAllPlatforms);
+  }
+  getPedido(idPlataforma) {
+    console.log(this.endpoints.getPedido(idPlataforma));
+    return this.client.get(this.endpoints.getPedido(idPlataforma));
   }
   deletePedido(id) {
     return this.client.delete(this.endpoints.deletePedido(id));
@@ -52,15 +56,11 @@ class ApiClient {
     );
   }
   insertCsv(file) {
-    return this.client.post(
-      this.endpoints.insertCsv,
-      file,
-      {
-        headers: {
-          "Content-type": "multipart/form-data"
-        }
+    return this.client.post(this.endpoints.insertCsv, file, {
+      headers: {
+        "Content-type": "multipart/form-data"
       }
-    );
+    });
   }
   queuePedido(pedido) {
     return this.client.post(this.endpoints.queuePedido, pedido, {

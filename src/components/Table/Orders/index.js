@@ -8,7 +8,11 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 
 const { SearchBar } = Search;
-
+const prueba = (from, to, size) => (
+  <button type='button' className='btn btn-danger'>
+    Eliminar pedido
+  </button>
+);
 const columnTable = [
   {
     dataField: "id",
@@ -49,6 +53,18 @@ const columnTable = [
     headerClasses: "headerColor",
     sort: true,
     searchable: true
+  },
+  {
+    dataField: "delete",
+    text: "Accion",
+    classes: "columnColor",
+    headerClasses: "headerColor",
+    events: {
+      onClick: (e, column, columnIndex, row, rowIndex) => {
+        console.table(row);
+      }
+    },
+    formatter: prueba
   }
 ];
 
@@ -57,6 +73,7 @@ const customTotal = (from, to, size) => (
     Mostrando desde {from} a {to} pedidos de {size}
   </span>
 );
+
 
 const tableOptions = orders => ({
   paginationSize: 4,
@@ -128,6 +145,7 @@ const OrdersTable = ({ orders }) => (
         <hr />
         <BootstrapTable
           {...props.baseProps}
+          noDataIndication='La tabla no contiene elementos disponibles'
           pagination={paginationFactory(tableOptions(orders))}
         />
       </div>

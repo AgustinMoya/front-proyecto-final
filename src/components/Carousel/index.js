@@ -9,13 +9,13 @@ const ControlledCarousel = () => {
   return (
       <Carousel className="carousel">
         <Carousel.Item>
-          <img className='d-block w-100' src={prueba} alt='First slide' />
+          <img className='d-block' src={logo} alt='First slide' />
           <Carousel.Caption>
             <h3>Equipo wall-e</h3>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img className='d-block w-100' src={prueba} alt='Second slide' />
+          <img className='d-block' src={arduino} alt='Second slide' />
           <Carousel.Caption>
             <h3>Arduino</h3>
           </Carousel.Caption>

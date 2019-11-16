@@ -22,8 +22,6 @@ import styles from "./styles.scss";
 
 const INITIAL_STATE = {
   loading: false,
-  isLoading: false,
-  pedidos: [],
   users: [],
   columns: "",
   rows: "",
@@ -46,7 +44,7 @@ class AdminPage extends Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true, isLoading: true });
+    this.setState({ loading: true });
     this.props.firebase.users().on("value", snapshot => {
       const usersObject = snapshot.val();
       const usersList = Object.keys(usersObject).map(key => ({
@@ -56,13 +54,6 @@ class AdminPage extends Component {
       this.setState({
         users: usersList,
         loading: false
-      });
-      this.setState({ isLoading: true });
-      ApiClient.getAllPedidos().then(({ data }) => {
-        this.setState({
-          isLoading: false,
-          pedidos: data
-        });
       });
     });
   }
@@ -122,9 +113,7 @@ class AdminPage extends Component {
   render() {
     const {
       users,
-      pedidos,
       loading,
-      isLoading,
       columns,
       rows,
       showDeposit,
@@ -138,7 +127,7 @@ class AdminPage extends Component {
           <Tab.Container id='left-tabs-example' defaultActiveKey='usuarios'>
             <Row>
               <Col sm={12}>
-                <h1>Administrador: {authUser.username}</h1>
+                <h2>Administrador: {authUser.username}</h2>
               </Col>
             </Row>
             <Row>
@@ -154,9 +143,6 @@ class AdminPage extends Component {
                 <Nav variant='pills' className='flex-column'>
                   <Nav.Item>
                     <Nav.Link eventKey='usuarios'>Usuarios</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey='pedidos'>Pedidos</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey='crearDeposito'>Deposito</Nav.Link>
@@ -186,28 +172,6 @@ class AdminPage extends Component {
                       </center>
                     ) : (
                       <UserTable users={users} />
-                    )}
-                  </Tab.Pane>
-                  <Tab.Pane eventKey='pedidos'>
-                    {pedidos.length === 0 ? (
-                      <center>
-                        <Button variant='outline-dark' disabled={loading}>
-                          {isLoading && (
-                            <Spinner
-                              as='span'
-                              animation='grow'
-                              size='sm'
-                              role='status'
-                              aria-hidden='true'
-                            />
-                          )}
-                          {isLoading
-                            ? "Cargando…"
-                            : "Obtener todos los pedidos"}
-                        </Button>
-                      </center>
-                    ) : (
-                      <OrdersTable orders={pedidos} />
                     )}
                   </Tab.Pane>
                   <Tab.Pane eventKey='crearDeposito'>
