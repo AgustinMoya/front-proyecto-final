@@ -8,7 +8,7 @@ import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
 
 const { SearchBar } = Search;
 const prueba = (from, to, size) => (
-  <button type='button' className='btn btn-danger'>
+  <button type="button" className="btn btn-danger">
     Eliminar pedido
   </button>
 );
@@ -68,11 +68,10 @@ const columnTable = [
 ];
 
 const customTotal = (from, to, size) => (
-  <span className='marginLeft react-bootstrap-table-pagination-total'>
+  <span className="marginLeft react-bootstrap-table-pagination-total">
     Mostrando desde {from} a {to} pedidos de {size}
   </span>
 );
-
 
 const tableOptions = orders => ({
   paginationSize: 4,
@@ -80,14 +79,12 @@ const tableOptions = orders => ({
   // alwaysShowAllBtns: true, // Always show next and previous button
   // withFirstAndLast: false, // Hide the going to First and Last page button
   // hideSizePerPage: true, // Hide the sizePerPage dropdown always
-  // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+  hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
   firstPageText: "Primer pagina",
   prePageText: "<",
   nextPageText: ">",
   lastPageText: "Ultima pagina",
   nextPageTitle: "Primera pagina",
-  prePageTitle: "<",
-  firstPageTitle: ">",
   lastPageTitle: "Ultima pagina",
   showTotal: true,
   paginationTotalRenderer: customTotal,
@@ -112,7 +109,7 @@ const MyExportCSV = props => {
     props.onExport();
   };
   return (
-    <button className='btn btn-secondary' onClick={handleClick}>
+    <button className="btn btn-secondary" onClick={handleClick}>
       Exportar como CSV
     </button>
   );
@@ -120,7 +117,7 @@ const MyExportCSV = props => {
 const OrdersTable = ({ orders, handleDeletePedido }) => (
   <ToolkitProvider
     bootstrap4
-    keyField='id'
+    keyField="id"
     data={orders}
     columns={columnTable}
     search
@@ -137,14 +134,14 @@ const OrdersTable = ({ orders, handleDeletePedido }) => (
           <SearchBar
             {...props.searchProps}
             style={{ width: "100%" }}
-            placeholder='Buscar'
+            placeholder="Buscar"
           />
           <MyExportCSV {...props.csvProps} />
         </div>
         <hr />
         <BootstrapTable
           {...props.baseProps}
-          noDataIndication='La tabla no contiene elementos disponibles'
+          noDataIndication="La tabla no contiene elementos disponibles"
           pagination={paginationFactory(tableOptions(orders))}
         />
       </div>

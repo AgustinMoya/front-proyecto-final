@@ -13,6 +13,8 @@ class ApiClient {
     getPedido: idPlataforma => `/v1/pedidos?id_plataforma=${idPlataforma}`, //TODO: Query params
     deletePedido: id => `/v1/pedidos/${id}`,
     getAllPlatforms: "/v1/plataforma/all",
+    getTorre: "/v1/pedidos/torre",
+    getAllTorres: "/v1/torres/all",
     createMatrix: "/v1/matrix", //TODO: POST
     validateMatrix: "/v1/matrix/validate", //TODO: POST
     getMatrix: "/v1/matrix", //TODO: GET
@@ -31,6 +33,13 @@ class ApiClient {
   }
   deletePedido(id) {
     return this.client.delete(this.endpoints.deletePedido(id));
+  }
+
+  postTorre(data) {
+    return this.client.post(this.endpoints.getTorre, data);
+  }
+  getAllTorres() {
+    return this.client.get(this.endpoints.getAllTorres);
   }
 
   getMatrix() {
@@ -60,6 +69,7 @@ class ApiClient {
       }
     );
   }
+
   insertCsv(file) {
     return this.client.post(this.endpoints.insertCsv, file, {
       headers: {

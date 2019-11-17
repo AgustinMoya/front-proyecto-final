@@ -8,6 +8,8 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { compose } from "recompose";
 
+import { withFirebase } from "../Firebase";
+
 import { withAuthorization, withAuthentication } from "../Session";
 import { withPlatformValue } from "../Platform/context";
 
@@ -15,6 +17,8 @@ import ApiClient from "../../api-client/index";
 
 import OrdersTable from "../Table/Orders";
 import ReadOnlyDeposit from "../Deposit/ReadOnlyDeposit";
+import TowersTable from "../Table/Towers";
+import UserTable from "../Table/Users";
 
 const leyendas = [
   { color: "free", description: "Posicion libre" },
@@ -31,7 +35,10 @@ class HomePage extends Component {
       isLoadingPedidos: true,
       errorMessage: null,
       errorCode: null,
-      deposit: []
+      deposit: [],
+      towers: [],
+      users: [],
+      idTorre: ""
     };
   }
 
@@ -51,6 +58,17 @@ class HomePage extends Component {
 
   componentDidMount() {
     this.obtenerPedidos();
+    this.props.firebase.users().on("value", snapshot => {
+      const usersObject = snapshot.val();
+      const usersList = Object.keys(usersObject).map(key => ({
+        ...usersObject[key],
+        uid: key
+      }));
+      this.setState({
+        users: usersList.filter(user => user.roles && user.roles.ADMIN),
+        loading: false
+      });
+    });
   }
 
   deletePedido = idPedido => {
@@ -60,7 +78,7 @@ class HomePage extends Component {
       })
       .catch(error => {
         this.setState({
-          errorMessage: error.response.data.Message,
+          errorMessage: error.response.data.message,
           errorCode: error.response.status
         });
       });
@@ -73,15 +91,32 @@ class HomePage extends Component {
       });
     });
   };
+  getAllTowers = () => {
+    ApiClient.getAllTorres().then(({ data }) => {
+      this.setState({
+        towers: data
+      });
+    });
+  };
+
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
   render() {
     const {
       pedidos,
       isLoadingPedidos,
       deposit,
+      idTorre,
+      towers,
+      users,
       errorCode,
       errorMessage
     } = this.state;
     const { authUser } = this.props;
+    const isValid = idTorre === "";
+
     return (
       <Tab.Container id="left-tabs-example" defaultActiveKey="pedidos">
         <Row>
@@ -101,7 +136,9 @@ class HomePage extends Component {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="tower">Traer torre</Nav.Link>
+                <Nav.Link eventKey="tower" onClick={this.getAllTowers}>
+                  Traer torre
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="history">Historial de pedidos</Nav.Link>
@@ -179,13 +216,20 @@ class HomePage extends Component {
                 )}
               </Tab.Pane>
               <Tab.Pane eventKey="tower">
-                <span>Traer torre</span>
+                <TowersTable
+                  towers={towers}
+                  platformValue={
+                    this.props.platformValue || localStorage.getItem("platform")
+                  }
+                />
               </Tab.Pane>
               <Tab.Pane eventKey="history">
                 <span>Historial pedidos</span>
               </Tab.Pane>
               <Tab.Pane eventKey="help">
-                <span>Obtener ayuda</span>
+                <h3>Listado de administradores</h3>
+                <p>Si necesitas ayuda, ponete en contacto con tu administrador mas cercano</p>
+                <UserTable users={users} />
               </Tab.Pane>
             </Tab.Content>
           </Col>
@@ -198,5 +242,6 @@ const condition = authUser => !!authUser;
 export default compose(
   withAuthentication,
   withAuthorization(condition),
+  withFirebase,
   withPlatformValue
 )(HomePage);
