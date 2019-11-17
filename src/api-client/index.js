@@ -11,7 +11,8 @@ class ApiClient {
   endpoints = {
     getAllPedidos: "/v1/pedidos/all",
     getPedido: idPlataforma => `/v1/pedidos?id_plataforma=${idPlataforma}`, //TODO: Query params
-    deletePedido: id => `/v1/pedidos/${id}`,
+    liberarPedido: (id, plataforma) =>
+      `/v1/plataforma/leave?id_pedido=${id}&id_plataforma=${plataforma}`,
     getAllPlatforms: "/v1/plataforma/all",
     getTorre: "/v1/pedidos/torre",
     getAllTorres: "/v1/torres/all",
@@ -31,8 +32,8 @@ class ApiClient {
   getPedido(idPlataforma) {
     return this.client.get(this.endpoints.getPedido(idPlataforma));
   }
-  deletePedido(id) {
-    return this.client.delete(this.endpoints.deletePedido(id));
+  liberarPedido(id, plataforma) {
+    return this.client.put(this.endpoints.liberarPedido(id, plataforma));
   }
 
   postTorre(data) {

@@ -149,10 +149,6 @@ const TowersTable = ({ towers, platformValue }) => {
             className="btn btn-primary"
             disabled={selected.length === 0}
             onClick={() => {
-              console.log("pase por aca", {
-                id_plataforma: platformValue,
-                id_torre: selected[0]
-              });
               ApiClient.postTorre({
                 id_plataforma: platformValue,
                 id_torre: selected[0]
@@ -162,7 +158,6 @@ const TowersTable = ({ towers, platformValue }) => {
                   setMessage(data);
                 })
                 .catch(error => {
-                  console.log("entro al error", error);
                   setCode(error.response.status);
                   setMessage(error.response.data.message);
                 });

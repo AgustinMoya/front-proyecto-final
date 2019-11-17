@@ -45,12 +45,26 @@ class HomePage extends Component {
   obtenerPedidos = () => {
     if (this.props.authUser.roles.ADMIN === "ADMIN") {
       ApiClient.getAllPedidos().then(({ data }) => {
+        data.forEach((order, index, theArray) => {
+          if (theArray[index].id_torre === null) {
+            theArray[index].id_torre = theArray[index].id_torre1;
+          } else {
+            theArray[index].id_torre1 = theArray[index].id_torre;
+          }
+        });
         this.setState({ pedidos: data, isLoadingPedidos: false });
       });
     } else {
       const platform =
         this.props.platformValue || localStorage.getItem("platform");
       ApiClient.getPedido(platform).then(({ data }) => {
+        data.forEach((order, index, theArray) => {
+          if (theArray[index].id_torre === null) {
+            theArray[index].id_torre = theArray[index].id_torre1;
+          } else {
+            theArray[index].id_torre1 = theArray[index].id_torre;
+          }
+        });
         this.setState({ pedidos: data, isLoadingPedidos: false });
       });
     }
@@ -116,7 +130,6 @@ class HomePage extends Component {
     } = this.state;
     const { authUser } = this.props;
     const isValid = idTorre === "";
-
     return (
       <Tab.Container id="left-tabs-example" defaultActiveKey="pedidos">
         <Row>
@@ -125,7 +138,7 @@ class HomePage extends Component {
           </Col>
         </Row>
         <Row className="borderTabs">
-          <Col sm={3} className="borderRight">
+          <Col sm={2} className="borderRight">
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
                 <Nav.Link eventKey="pedidos">Ver pedidos</Nav.Link>
@@ -148,7 +161,7 @@ class HomePage extends Component {
               </Nav.Item>
             </Nav>
           </Col>
-          <Col sm={9} className="marginAuto">
+          <Col sm={10} className="marginAuto">
             <Tab.Content>
               <Tab.Pane eventKey="pedidos">
                 {isLoadingPedidos ? (
@@ -165,7 +178,15 @@ class HomePage extends Component {
                     </Button>
                   </center>
                 ) : (
-                  <OrdersTable orders={pedidos} />
+                  <OrdersTable
+                    orders={pedidos.filter(
+                      pedido => pedido.estado !== "FINALIZADO"
+                    )}
+                    plataforma={
+                      this.props.platformValue ||
+                      localStorage.getItem("platform")
+                    }
+                  />
                 )}
                 <Row style={{ marginTop: "20px" }}>
                   <Col xs={12}>
@@ -224,11 +245,33 @@ class HomePage extends Component {
                 />
               </Tab.Pane>
               <Tab.Pane eventKey="history">
-                <span>Historial pedidos</span>
+                {isLoadingPedidos ? (
+                  <center>
+                    <Button variant="outline-dark" disabled>
+                      <Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                      Cargando…
+                    </Button>
+                  </center>
+                ) : (
+                  <OrdersTable
+                    orders={pedidos}
+                    plataforma={localStorage.getItem("platform")}
+                    handleLiberarPedido={this.obtenerPedidos()}
+                  />
+                )}
               </Tab.Pane>
               <Tab.Pane eventKey="help">
                 <h3>Listado de administradores</h3>
-                <p>Si necesitas ayuda, ponete en contacto con tu administrador mas cercano</p>
+                <p>
+                  Si necesitas ayuda, ponete en contacto con tu administrador
+                  mas cercano
+                </p>
                 <UserTable users={users} />
               </Tab.Pane>
             </Tab.Content>
