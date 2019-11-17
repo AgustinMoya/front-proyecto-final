@@ -71,8 +71,8 @@ class ApiClient {
     );
   }
 
-  insertCsv(file) {
-    return this.client.post(this.endpoints.insertCsv, file, {
+  insertCsv(formData) {
+    return this.client.post(this.endpoints.insertCsv, formData, {
       headers: {
         "Content-type": "multipart/form-data"
       }
