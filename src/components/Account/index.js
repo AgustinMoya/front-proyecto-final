@@ -5,6 +5,12 @@ import { withFirebase } from "../Firebase";
 import { PasswordForgetForm } from "../PasswordForget";
 import PasswordChangeForm from "../PasswordChange";
 
+import Image from "react-bootstrap/Image";
+
+import logo from "./Logo grande 3.PNG";
+
+import "./styles.scss";
+
 const SIGN_IN_METHODS = [
   {
     id: "password",
@@ -19,9 +25,14 @@ const SIGN_IN_METHODS = [
 const AccountPage = () => (
   <AuthUserContext.Consumer>
     {authUser => (
-      <div>
-        <h1>Mi cuenta: {authUser.username}</h1>
+      <div className="form-signin">
+        <Image src={logo} fluid />
+        <h2>Mi cuenta: {authUser.username}</h2>
+        <hr />
+        <h4>Recuperar contraseña</h4>
         <PasswordForgetForm />
+        <hr />
+        <h4>Cambiar contraseña</h4>
         <PasswordChangeForm />
       </div>
     )}

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
+import Alert from "react-bootstrap/Alert";
 
 const PasswordForgetPage = () => (
   <div>
@@ -49,18 +50,28 @@ class PasswordForgetFormBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
+        <label htmlFor="inputEmail" className="sr-only">
+          Correo electrónico
+        </label>
         <input
+          id="inputEmail"
+          className="form-control"
           name="email"
+          type="email"
+          placeholder="Email"
           value={this.state.email}
           onChange={this.onChange}
-          type="text"
-          placeholder="Email"
         />
-        <button disabled={isInvalid} type="submit">
+        <button
+          className="btn btn-lg btn-primary btn-block"
+          disabled={isInvalid}
+          style={{ padding: "initial" }}
+          type="submit"
+        >
           Recuperar mi contraseña
         </button>
 
-        {error && <p>{error.message}</p>}
+        {error && <Alert variant="danger">{error.message}</Alert>}
       </form>
     );
   }

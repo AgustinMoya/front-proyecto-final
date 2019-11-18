@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { withFirebase } from "../Firebase";
+import Alert from "react-bootstrap/Alert";
 
 const INITIAL_STATE = {
   passwordOne: "",
@@ -41,25 +42,41 @@ class PasswordChangeForm extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
+        <label htmlFor="inputPassword" className="sr-only">
+          Contraseña
+        </label>
         <input
+          id="inputPassword"
           name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
-          type="password"
           placeholder="Nueva contraseña"
+          className="form-control"
+          type="password"
+          style={{ marginTop: "15px" }}
         />
+        <label htmlFor="inputPassword2" className="sr-only">
+          Confirmar contraseña
+        </label>
         <input
+          id="inputPassword2"
           name="passwordTwo"
           value={passwordTwo}
           onChange={this.onChange}
+          placeholder="Confirmar contraseña"
+          className="form-control"
           type="password"
-          placeholder="Confirmar nueva contraseña"
         />
-        <button disabled={isInvalid} type="submit">
-          Cambiar contraseña
+        <button
+          className="btn btn-lg btn-primary btn-block"
+          disabled={isInvalid}
+          style={{ padding: "initial" }}
+          type="submit"
+        >
+          Registrarse
         </button>
 
-        {error && <p>{error.message}</p>}
+        {error && <Alert variant="danger">{error.message}</Alert>}
       </form>
     );
   }
