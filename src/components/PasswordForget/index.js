@@ -4,10 +4,15 @@ import { Link } from "react-router-dom";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
 import Alert from "react-bootstrap/Alert";
+import Image from "react-bootstrap/Image";
+
+import logo from "./Logo grande 3.PNG";
 
 const PasswordForgetPage = () => (
-  <div>
-    <h1>PasswordForget</h1>
+  <div className="form-signin">
+    <Image src={logo} fluid />
+
+    <h2>Recuperar contraseña</h2>
     <PasswordForgetForm />
   </div>
 );
