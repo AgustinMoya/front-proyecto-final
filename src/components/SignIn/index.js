@@ -19,8 +19,7 @@ import "./styles.scss";
 const ERROR_CODE_ACCOUNT_EXISTS =
   "auth/account-exists-with-different-credential";
 
-const ERROR_MSG_ACCOUNT_EXISTS = `
-Una cuenta con una dirección de correo electronico para esta cuenta social ya existe.`;
+const ERROR_MSG_ACCOUNT_EXISTS = `Datos erroneos, verificar mail o contraseña`;
 
 const SignInPage = () => (
   <div className="form-signin">
@@ -123,7 +122,7 @@ class SignInFormBase extends Component {
           disabled={isInvalid}
           className="btn btn-lg btn-primary btn-block"
           type="submit"
-          style={{padding:"initial"}}
+          style={{ padding: "initial" }}
         >
           <span>Ingresar</span>
         </button>

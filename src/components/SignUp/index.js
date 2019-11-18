@@ -3,9 +3,14 @@ import { Link, withRouter } from "react-router-dom";
 import { compose } from "recompose";
 
 import { withFirebase } from "../Firebase";
+import Image from "react-bootstrap/Image";
+import Alert from "react-bootstrap/Alert";
 
 import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
+
+import logo from "./Logo grande 3.PNG";
+import "./styles.scss";
 
 const INITIAL_STATE = {
   username: "",
@@ -20,9 +25,10 @@ const ERROR_CODE_ACCOUNT_EXISTS = "auth/email-already-in-use";
 
 const ERROR_MSG_ACCOUNT_EXISTS = `
 Ya existe una cuenta con esta dirección de correo electrónico.
-Intenta iniciar sesión con esta cuenta.`;
+Intenta crear una cuenta con distinto mail`;
 const SignUpPage = () => (
-  <div>
+  <div className="form-signin">
+    <Image src={logo} fluid />
     <h1>Registrate</h1>
     <SignUpForm />
   </div>
@@ -88,48 +94,79 @@ class SignUpFormBase extends Component {
       username === "";
     return (
       <form onSubmit={this.onSubmit}>
+        <label htmlFor="inputNombre" className="sr-only">
+          Nombre completo
+        </label>
         <input
-          name='username'
+          id="inputNombre"
+          className="form-control"
+          name="username"
+          type="text"
+          placeholder="Nombre completo"
           value={username}
           onChange={this.onChange}
-          type='text'
-          placeholder='Nombre completo'
+          style={{ marginBottom: "15px" }}
         />
+        <label htmlFor="inputEmail" className="sr-only">
+          Correo electrónico
+        </label>
         <input
-          name='email'
+          id="inputEmail"
+          className="form-control"
+          name="email"
+          type="email"
+          placeholder="Email"
           value={email}
           onChange={this.onChange}
-          type='text'
-          placeholder='Email'
         />
+        <label htmlFor="inputPassword" className="sr-only">
+          Contraseña
+        </label>
         <input
-          name='passwordOne'
+          id="inputPassword"
+          name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
-          type='password'
-          placeholder='Contraseña'
+          placeholder="Contraseña"
+          className="form-control"
+          type="password"
         />
+        <label htmlFor="inputPassword2" className="sr-only">
+          Confirmar contraseña
+        </label>
         <input
-          name='passwordTwo'
+          id="inputPassword2"
+          name="passwordTwo"
           value={passwordTwo}
           onChange={this.onChange}
-          type='password'
-          placeholder='Confirmar contraseña'
+          placeholder="Confirmar contraseña"
+          className="form-control"
+          type="password"
         />
-        <label>
-          Administrador:
+
+        <div class="form-group form-check">
           <input
-            name='isAdmin'
-            type='checkbox'
+            type="checkbox"
+            class="form-check-input"
+            id="admin"
+            name="isAdmin"
             checked={isAdmin}
             onChange={this.onChangeCheckbox}
           />
-        </label>
-        <button disabled={isInvalid} type='submit'>
+          <label class="form-check-label" for="admin">
+            Administrador
+          </label>
+        </div>
+        <button
+          className="btn btn-lg btn-primary btn-block"
+          disabled={isInvalid}
+          style={{ padding: "initial" }}
+          type="submit"
+        >
           Registrarse
         </button>
 
-        {error && <p>{error.message}</p>}
+        {error && <Alert variant="danger">{error.message}</Alert>}
       </form>
     );
   }

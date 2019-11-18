@@ -20,19 +20,19 @@ const Navigation = () => (
 );
 
 const NavigationAuth = ({ authUser }) => (
-  <Navbar collapseOnSelect expand='md' bg='dark' variant='dark' sticky='top'>
+  <Navbar collapseOnSelect expand="md" bg="dark" variant="dark" sticky="top">
     <Navbar.Brand as={Link} to={ROUTES.LANDING}>
       <img
         src={logo}
-        width='30'
-        height='30'
-        className='d-inline-block align-top'
-        alt='React Bootstrap logo'
+        width="30"
+        height="30"
+        className="d-inline-block align-top"
+        alt="React Bootstrap logo"
       />
     </Navbar.Brand>
-    <Navbar.Toggle aria-controls='responsive-navbar-nav' />
-    <Navbar.Collapse id='responsive-navbar-nav'>
-      <Nav className='mr-auto'>
+    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    <Navbar.Collapse id="responsive-navbar-nav">
+      <Nav className="mr-auto">
         <Nav.Item>
           <Nav.Link as={Link} to={ROUTES.HOME}>
             Inicio
@@ -52,7 +52,7 @@ const NavigationAuth = ({ authUser }) => (
         )}
       </Nav>
       <Nav>
-        <Navbar.Text style={{marginRight: "15px"}}>
+        <Navbar.Text style={{ marginRight: "15px" }}>
           Conectado como: <a href={ROUTES.ACCOUNT}>{authUser.username}</a>
         </Navbar.Text>
         <Nav.Item>
@@ -64,20 +64,25 @@ const NavigationAuth = ({ authUser }) => (
 );
 
 const NavigationNonAuth = () => (
-  <Navbar bg='dark' variant='dark'>
+  <Navbar bg="dark" variant="dark">
     <Navbar.Brand as={Link} to={ROUTES.LANDING}>
       <img
         src={logo}
-        width='30'
-        height='30'
-        className='d-inline-block align-top'
-        alt=''
+        width="30"
+        height="30"
+        className="d-inline-block align-top"
+        alt=""
       />
     </Navbar.Brand>
-    <Nav className='mr-auto'>
+    <Nav className="mr-auto">
       <Nav.Item>
         <Nav.Link as={Link} to={ROUTES.SIGN_IN}>
           Ingresa
+        </Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link as={Link} to={ROUTES.SIGN_UP}>
+          Registrarse
         </Nav.Link>
       </Nav.Item>
     </Nav>
