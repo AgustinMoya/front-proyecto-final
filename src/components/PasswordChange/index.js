@@ -73,7 +73,7 @@ class PasswordChangeForm extends Component {
           style={{ padding: "initial" }}
           type="submit"
         >
-          Registrarse
+          Cambiar mi contraseña
         </button>
 
         {error && <Alert variant="danger">{error.message}</Alert>}

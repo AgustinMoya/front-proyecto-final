@@ -27,7 +27,10 @@ const AccountPage = () => (
     {authUser => (
       <div className="form-signin">
         <Image src={logo} fluid />
-        <h2>Mi cuenta: {authUser.email}</h2>
+        <div>
+          <h2>Mi cuenta:</h2>
+          <span>{authUser.email}</span>
+        </div>
         <hr />
         <h4>Recuperar contraseña</h4>
         <PasswordForgetForm />
