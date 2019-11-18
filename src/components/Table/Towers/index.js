@@ -82,11 +82,9 @@ const tableOptions = towers => ({
   ]
 });
 
-const TowersTable = ({ towers, platformValue }) => {
+const TowersTable = ({ towers, platformValue, postTorre }) => {
   const [nonSelectables, setNonSelectables] = useState([]);
   const [selected, setSelected] = useState([]);
-  const [message, setMessage] = useState(null);
-  const [code, setCode] = useState(null);
 
   const handleOnSelect = (row, isSelect) => {
     if (isSelect) {
@@ -134,49 +132,18 @@ const TowersTable = ({ towers, platformValue }) => {
             pagination={paginationFactory(tableOptions(towers))}
             {...props.baseProps}
           />
-          {nonSelectables.length === 1 && (
-            <div class="alert alert-info" role="alert">
-              <p>La torre: {nonSelectables[0]} esta en camino</p>
-            </div>
-          )}
-          {nonSelectables.length > 1 && (
-            <div class="alert alert-info" role="alert">
-              <p>Las torres: {nonSelectables.join(",")} estan en camino</p>
-            </div>
-          )}
 
           <button
             className="btn btn-primary"
             disabled={selected.length === 0}
             onClick={() => {
-              ApiClient.postTorre({
-                id_plataforma: platformValue,
-                id_torre: selected[0]
-              })
-                .then(({ data, status }) => {
-                  setCode(status);
-                  setMessage(data);
-                })
-                .catch(error => {
-                  setCode(error.response.status);
-                  setMessage(error.response.data.message);
-                });
+              postTorre(selected[0]);
               setNonSelectables([...nonSelectables, selected[0]]);
               setSelected([]);
             }}
           >
             Traer torre
           </button>
-
-          <Row style={{ marginTop: "20px" }}>
-            <Col xs={12}>
-              {code >= 200 && code < 300 ? (
-                <Alert variant="success">{message}</Alert>
-              ) : code === 500 ? (
-                <Alert variant="danger">{message}</Alert>
-              ) : null}
-            </Col>
-          </Row>
         </div>
       )}
     </ToolkitProvider>

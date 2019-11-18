@@ -35,6 +35,8 @@ class HomePage extends Component {
       isLoadingPedidos: true,
       errorMessage: null,
       errorCode: null,
+      towerMessage: null,
+      towerErrorCode: null,
       deposit: [],
       towers: [],
       users: [],
@@ -108,9 +110,31 @@ class HomePage extends Component {
   getAllTowers = () => {
     ApiClient.getAllTorres().then(({ data }) => {
       this.setState({
-        towers: data
+        towers: data,
+        towerMessage: null,
+        towerErrorCode: null
       });
     });
+  };
+  postTorre = selected => {
+    const platform =
+      this.props.platformValue || localStorage.getItem("platform");
+    ApiClient.postTorre({
+      id_plataforma: platform,
+      id_torre: selected
+    })
+      .then(({ data, status }) => {
+        this.setState({
+          towerMessage: data,
+          towerErrorCode: status
+        });
+      })
+      .catch(error => {
+        this.setState({
+          towerMessage: error.response.data,
+          towerErrorCode: error.response.status
+        });
+      });
   };
 
   onChange = event => {
@@ -243,7 +267,18 @@ class HomePage extends Component {
                   platformValue={
                     this.props.platformValue || localStorage.getItem("platform")
                   }
+                  postTorre={this.postTorre}
                 />
+                <Row style={{ marginTop: "20px" }}>
+                  <Col xs={12}>
+                    {this.state.towerErrorCode >= 200 &&
+                    this.state.towerErrorCode < 300 ? (
+                      <Alert variant="success">{this.state.towerMessage}</Alert>
+                    ) : this.state.towerErrorCode === 500 ? (
+                      <Alert variant="danger">{this.state.towerMessage}</Alert>
+                    ) : null}
+                  </Col>
+                </Row>
               </Tab.Pane>
               <Tab.Pane eventKey="history">
                 {isLoadingPedidos ? (
