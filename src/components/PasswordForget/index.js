@@ -8,6 +8,10 @@ import Image from "react-bootstrap/Image";
 
 import logo from "./Logo grande 3.PNG";
 
+const ERROR_CODE_USER_NOT_FOUND = "auth/user-not-found";
+
+const ERROR_MSG_USER_NOT_FOUND = `Mail no encontrado`;
+
 const PasswordForgetPage = () => (
   <div className="form-signin">
     <Image src={logo} fluid />
@@ -38,6 +42,10 @@ class PasswordForgetFormBase extends Component {
         this.setState({ ...INITIAL_STATE });
       })
       .catch(error => {
+        console.log("error firebase", error);
+        if (error.code === ERROR_CODE_USER_NOT_FOUND) {
+          error.message = ERROR_MSG_USER_NOT_FOUND;
+        }
         this.setState({ error });
       });
 
@@ -70,7 +78,7 @@ class PasswordForgetFormBase extends Component {
         <button
           className="btn btn-lg btn-primary btn-block"
           disabled={isInvalid}
-          style={{ padding: "initial" }}
+          style={{ padding: "initial", marginBottom: "15px" }}
           type="submit"
         >
           Recuperar mi contraseña

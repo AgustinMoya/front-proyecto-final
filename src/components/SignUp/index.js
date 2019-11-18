@@ -26,6 +26,7 @@ const ERROR_CODE_ACCOUNT_EXISTS = "auth/email-already-in-use";
 const ERROR_MSG_ACCOUNT_EXISTS = `
 Ya existe una cuenta con esta dirección de correo electrónico.
 Intenta crear una cuenta con distinto mail`;
+
 const SignUpPage = () => (
   <div className="form-signin">
     <Image src={logo} fluid />
