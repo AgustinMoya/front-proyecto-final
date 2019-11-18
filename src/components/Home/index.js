@@ -186,6 +186,7 @@ class HomePage extends Component {
                       this.props.platformValue ||
                       localStorage.getItem("platform")
                     }
+                    handleLiberarPedido={this.obtenerPedidos}
                   />
                 )}
                 <Row style={{ marginTop: "20px" }}>
@@ -262,7 +263,7 @@ class HomePage extends Component {
                   <OrdersTable
                     orders={pedidos}
                     plataforma={localStorage.getItem("platform")}
-                    handleLiberarPedido={this.obtenerPedidos()}
+                    handleLiberarPedido={this.obtenerPedidos}
                   />
                 )}
               </Tab.Pane>

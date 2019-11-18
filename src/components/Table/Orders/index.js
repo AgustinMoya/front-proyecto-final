@@ -18,7 +18,7 @@ const prueba = (from, to, size) => (
     Liberar pedido
   </button>
 );
-const columnTable = (plataforma, setMessage, setCode) => [
+const columnTable = (plataforma, setMessage, setCode, handleLiberarPedido) => [
   {
     dataField: "id",
     text: "ID de pedido",
@@ -89,10 +89,12 @@ const columnTable = (plataforma, setMessage, setCode) => [
           .then(({ data, status }) => {
             setCode(status);
             setMessage(data);
+            handleLiberarPedido();
           })
           .catch(error => {
             setCode(error.response.status);
             setMessage(error.response.data);
+            handleLiberarPedido();
           });
       }
     },
@@ -173,7 +175,7 @@ const OrdersTable = ({ orders, plataforma, handleLiberarPedido }) => {
             Las columnas: nombre de producto, orden de compra y ID de robot son
             filtrables
           </p>
-          <div style={{ display: "table-caption" }}>
+          <div style={{ display: "table-caption", width: "170px" }}>
             <SearchBar
               {...props.searchProps}
               style={{ width: "100%" }}
@@ -191,7 +193,7 @@ const OrdersTable = ({ orders, plataforma, handleLiberarPedido }) => {
             <Col xs={12}>
               <button
                 className="btn btn-secondary"
-                onClick={handleLiberarPedido}
+                onClick={() => console.log("nada")}
               >
                 Refrescar
               </button>
