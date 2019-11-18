@@ -15,12 +15,15 @@ import "./styles.scss";
 const INITIAL_STATE = {
   username: "",
   email: "",
+  passwordTitle: null,
+  passwordMessages: [],
   passwordOne: "",
   passwordTwo: "",
   isAdmin: false,
   error: null
 };
 
+const passwordRegex = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/;
 const ERROR_CODE_ACCOUNT_EXISTS = "auth/email-already-in-use";
 
 const ERROR_MSG_ACCOUNT_EXISTS = `
@@ -43,6 +46,20 @@ class SignUpFormBase extends Component {
 
   onSubmit = event => {
     const { username, email, passwordOne, isAdmin } = this.state;
+    if (!passwordRegex.test(passwordOne)) {
+      event.preventDefault();
+      this.setState({
+        passwordTitle: "La contraseña debera tener:",
+        passwordMessages: [
+          "Al menos 8 caracteres",
+          "Incluir al menos 1 letra minuscula",
+          "Incluir al menos 1 letra mayuscula",
+          "Incluir al menos 1 numero",
+          "Incluir al menos un caracter especial -> !@#$%^&*"
+        ]
+      });
+      return;
+    }
     const roles = {};
     if (isAdmin) {
       roles[ROLES.ADMIN] = ROLES.ADMIN;
@@ -85,6 +102,8 @@ class SignUpFormBase extends Component {
       email,
       passwordOne,
       passwordTwo,
+      passwordTitle,
+      passwordMessages,
       error,
       isAdmin
     } = this.state;
@@ -166,6 +185,20 @@ class SignUpFormBase extends Component {
         >
           Registrarse
         </button>
+
+        {passwordTitle && (
+          <Alert
+            variant="warning"
+            style={{ marginTop: "15px", textAlign: "left" }}
+          >
+            {passwordTitle}
+            <ul>
+              {passwordMessages.map(message => (
+                <li key={message}>{message}</li>
+              ))}
+            </ul>
+          </Alert>
+        )}
 
         {error && <Alert variant="danger">{error.message}</Alert>}
       </form>

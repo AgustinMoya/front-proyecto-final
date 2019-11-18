@@ -6,8 +6,11 @@ import Alert from "react-bootstrap/Alert";
 const INITIAL_STATE = {
   passwordOne: "",
   passwordTwo: "",
+  passwordTitle: null,
+  passwordMessages: [],
   error: null
 };
+const passwordRegex = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/;
 
 class PasswordChangeForm extends Component {
   constructor(props) {
@@ -19,6 +22,20 @@ class PasswordChangeForm extends Component {
   onSubmit = event => {
     const { passwordOne } = this.state;
 
+    if (!passwordRegex.test(passwordOne)) {
+      event.preventDefault();
+      this.setState({
+        passwordTitle: "La contraseña debera tener:",
+        passwordMessages: [
+          "Al menos 8 caracteres",
+          "Incluir al menos 1 letra minuscula",
+          "Incluir al menos 1 letra mayuscula",
+          "Incluir al menos 1 numero",
+          "Incluir al menos un caracter especial -> !@#$%^&*"
+        ]
+      });
+      return;
+    }
     this.props.firebase
       .doPasswordUpdate(passwordOne)
       .then(() => {
@@ -36,7 +53,13 @@ class PasswordChangeForm extends Component {
   };
 
   render() {
-    const { passwordOne, passwordTwo, error } = this.state;
+    const {
+      passwordOne,
+      passwordTwo,
+      error,
+      passwordTitle,
+      passwordMessages
+    } = this.state;
 
     const isInvalid = passwordOne !== passwordTwo || passwordOne === "";
 
@@ -76,6 +99,19 @@ class PasswordChangeForm extends Component {
           Cambiar mi contraseña
         </button>
 
+        {passwordTitle && (
+          <Alert
+            variant="warning"
+            style={{ marginTop: "15px", textAlign: "left" }}
+          >
+            {passwordTitle}
+            <ul>
+              {passwordMessages.map(message => (
+                <li key={message}>{message}</li>
+              ))}
+            </ul>
+          </Alert>
+        )}
         {error && <Alert variant="danger">{error.message}</Alert>}
       </form>
     );

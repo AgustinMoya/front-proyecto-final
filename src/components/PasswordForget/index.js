@@ -9,8 +9,10 @@ import Image from "react-bootstrap/Image";
 import logo from "./Logo grande 3.PNG";
 
 const ERROR_CODE_USER_NOT_FOUND = "auth/user-not-found";
+const ERROR_CODE_BAD_FORMAT = "auth/invalid-email";
 
-const ERROR_MSG_USER_NOT_FOUND = `Mail no encontrado`;
+const ERROR_MSG_USER_NOT_FOUND = `Mail no encontrado en la base de usuarios`;
+const ERROR_MSG_BAD_FORMAT = `Mail ingresado tiene mal formato. Deberia ser ejemplo@ejemplo.com`;
 
 const PasswordForgetPage = () => (
   <div className="form-signin">
@@ -46,6 +48,10 @@ class PasswordForgetFormBase extends Component {
         if (error.code === ERROR_CODE_USER_NOT_FOUND) {
           error.message = ERROR_MSG_USER_NOT_FOUND;
         }
+        if (error.code === ERROR_CODE_BAD_FORMAT) {
+          error.message = ERROR_MSG_BAD_FORMAT;
+        }
+        
         this.setState({ error });
       });
 
