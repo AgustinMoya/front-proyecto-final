@@ -3,12 +3,12 @@ import React from "react";
 import ReadOnlyEstante from "../../Estante/ReadOnlyEstante/index";
 import styles from "../styles.scss";
 
-const ReadOnlyDeposit = ({matrix}) => {
+const ReadOnlyDeposit = ({ matrix }) => {
   const createDeposit = matrix => {
     let depositValue = [];
 
-    for (let i = 0; i < matrix.length - 1; i++) {
-      for (let j = 0; j < matrix[i].length - 1; j++) {
+    for (let i = 0; i <= matrix.length - 1; i++) {
+      for (let j = 0; j <= matrix[i].length - 1; j++) {
         const seatingStyle = (
           <ReadOnlyEstante column={j} row={i} value={matrix[i][j]} />
         );

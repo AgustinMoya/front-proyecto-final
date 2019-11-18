@@ -30,7 +30,8 @@ const INITIAL_STATE = {
   showDeposit: false,
   code: null,
   message: null,
-  prueba: ""
+  prueba: "",
+  errorMessage: null
 };
 
 const leyendas = [
@@ -111,6 +112,12 @@ class AdminPage extends Component {
     });
   };
   sendRequest = () => {
+    if (this.state.file === null) {
+      this.setState({
+        errorMessage: "Antes de enviar, es necesario elegir un archivo"
+      });
+      return;
+    }
     const file = this.state.file;
     const formData = new FormData();
     formData.append("file", file, file.name);
@@ -291,6 +298,7 @@ class AdminPage extends Component {
                     </Row>
                   </Tab.Pane>
                   <Tab.Pane eventKey="files">
+
                     <div class="input-group">
                       <div class="custom-file">
                         <input
@@ -300,7 +308,10 @@ class AdminPage extends Component {
                           aria-describedby="inputGroupFileAddon04"
                           accept=".csv"
                           onChange={evt =>
-                            this.setState({ file: evt.target.files[0] })
+                            this.setState({
+                              file: evt.target.files[0],
+                              errorMessage: null
+                            })
                           }
                           onClick={event => {
                             event.target.value = null;
@@ -324,6 +335,15 @@ class AdminPage extends Component {
                         </button>
                       </div>
                     </div>
+                    {this.state.errorMessage && (
+                      <Row style={{ marginTop: "20px" }}>
+                        <Col xs={12}>
+                          <Alert variant="danger">
+                            {this.state.errorMessage}
+                          </Alert>
+                        </Col>
+                      </Row>
+                    )}
                     <Row style={{ marginTop: "20px" }}>
                       <Col xs={12}>
                         {this.state.code >= 200 && this.state.code < 300 ? (
