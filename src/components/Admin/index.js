@@ -114,7 +114,9 @@ class AdminPage extends Component {
   sendRequest = () => {
     if (this.state.file === null) {
       this.setState({
-        errorMessage: "Antes de enviar, es necesario elegir un archivo"
+        errorMessage: "Antes de enviar, es necesario elegir un archivo",
+        message: null,
+        code: null
       });
       return;
     }
@@ -298,7 +300,6 @@ class AdminPage extends Component {
                     </Row>
                   </Tab.Pane>
                   <Tab.Pane eventKey="files">
-
                     <div class="input-group">
                       <div class="custom-file">
                         <input
