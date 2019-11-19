@@ -7,27 +7,19 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
+import Col from "react-bootstrap/Col";
 
 import ApiClient from "../../../api-client/index";
 
 const { SearchBar } = Search;
 
-const columnTable = () => [
+const columnTable = [
   {
     dataField: "id",
-    text: "ID de torre",
+    text: "ID de robot",
     headerClasses: "headerColor",
-    searchable: false,
-    sort: true
-  },
-  {
-    dataField: "estado",
-    text: "Estado de la torre",
-    headerClasses: "headerColor",
-    sort: true,
-    searchable: true
+    searchable: false
   },
   {
     dataField: "loc1",
@@ -42,6 +34,29 @@ const columnTable = () => [
     headerClasses: "headerColor",
     sort: true,
     searchable: true
+  },
+  {
+    dataField: "actual",
+    text: "Posicion actual",
+    headerClasses: "headerColor",
+    sort: true,
+    searchable: false,
+    formatter: cell => (cell ? cell : "El robot está en la plataforma")
+  },
+  {
+    dataField: "estado",
+    text: "Estado del robot",
+    headerClasses: "headerColor",
+    sort: true,
+    searchable: true
+  },
+  {
+    dataField: "camino",
+    text: "Camino del robot",
+    headerClasses: "headerColor",
+    sort: true,
+    searchable: true,
+    formatter: cell => (cell ? cell : "No tiene un camino asignado")
   }
 ];
 
@@ -51,7 +66,7 @@ const customTotal = (from, to, size) => (
   </span>
 );
 
-const tableOptions = towers => ({
+const tableOptions = orders => ({
   paginationSize: 4,
   pageStartIndex: 1,
   // alwaysShowAllBtns: true, // Always show next and previous button
@@ -77,77 +92,65 @@ const tableOptions = towers => ({
     },
     {
       text: "Todos",
-      value: towers.length
+      value: orders.length
     }
   ]
 });
 
-const TowersTable = ({ towers, platformValue, postTorre }) => {
-  const [nonSelectables, setNonSelectables] = useState([]);
-  const [selected, setSelected] = useState([]);
-
-  const handleOnSelect = (row, isSelect) => {
-    if (isSelect) {
-      setSelected([row.id]);
-    } else {
-      setSelected([]);
-    }
+const MyExportCSV = props => {
+  const handleClick = () => {
+    props.onExport();
   };
+  return (
+    <button className="btn btn-secondary" onClick={handleClick}>
+      Exportar como CSV
+    </button>
+  );
+};
 
+const RobotsTable = ({ robots }) => {
   const selectRow = {
     mode: "radio",
     clickToSelect: true,
     style: { backgroundColor: "lightYellow" },
     headerColumnStyle: {
       backgroundColor: "#343a40"
-    },
-    onSelect: handleOnSelect,
-    selected: selected,
-    nonSelectable: nonSelectables
+    }
   };
   return (
     <ToolkitProvider
       bootstrap4
       keyField="id"
-      data={towers}
-      columns={columnTable()}
+      data={robots}
+      columns={columnTable}
       search
+      exportCSV
     >
       {props => (
         <div>
-          <h3>Listado de torres</h3>
-          <p>Todas las columnas de la tabla son filtrables</p>
-          <div style={{ display: "table-caption" }}>
+          <h3>Listado de robots</h3>
+          <p>
+            Todas las columnas son filtrables, excepto la columna "Id del robot"
+          </p>
+          <div style={{ display: "table-caption", width: "170px" }}>
             <SearchBar
               {...props.searchProps}
-              style={{ width: "100%", minWidth: "141px" }}
+              style={{ width: "100%" }}
               placeholder="Buscar"
             />
+            <MyExportCSV {...props.csvProps} />
           </div>
           <hr />
           <BootstrapTable
-            keyField="id"
+            {...props.baseProps}
             noDataIndication="La tabla no contiene elementos disponibles"
             selectRow={selectRow}
-            pagination={paginationFactory(tableOptions(towers))}
-            {...props.baseProps}
+            pagination={paginationFactory(tableOptions(robots))}
           />
-
-          <button
-            className="btn btn-primary"
-            disabled={selected.length === 0}
-            onClick={() => {
-              postTorre(selected[0]);
-              setNonSelectables([...nonSelectables, selected[0]]);
-              setSelected([]);
-            }}
-          >
-            Traer torre
-          </button>
         </div>
       )}
     </ToolkitProvider>
   );
 };
 
-export default TowersTable;
+export default RobotsTable;

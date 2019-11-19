@@ -54,14 +54,20 @@ class SignInFormBase extends Component {
     });
   }
   onSubmit = event => {
-    const { email, password, platform } = this.state;
+    const { email, password, platform, platforms } = this.state;
 
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.setPlatformValue(platform);
+        // eslint-disable-next-line eqeqeq
+        const found = platforms.find(p => p.id == platform);
         localStorage.setItem("platform", platform);
+        localStorage.setItem(
+          "posicion",
+          JSON.stringify([found.loc1, found.loc2])
+        );
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {

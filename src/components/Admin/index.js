@@ -13,6 +13,7 @@ import { AuthUserContext, withAuthorization } from "../Session";
 import * as ROLES from "../../constants/roles";
 
 import Deposit from "../Deposit";
+import RobotForm from "../Robots";
 import Alert from "react-bootstrap/Alert";
 
 import UserTable from "../Table/Users";
@@ -176,6 +177,12 @@ class AdminPage extends Component {
                   <Nav.Item>
                     <Nav.Link eventKey="files">Productos</Nav.Link>
                   </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="robots">Robots</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="prueba">Prueba</Nav.Link>
+                  </Nav.Item>
                 </Nav>
               </Col>
               <Col sm={9} className="marginAuto">
@@ -314,6 +321,7 @@ class AdminPage extends Component {
                               errorMessage: null
                             })
                           }
+                          lang="es"
                           onClick={event => {
                             event.target.value = null;
                           }}
@@ -354,6 +362,9 @@ class AdminPage extends Component {
                         ) : null}
                       </Col>
                     </Row>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="robots">
+                    <RobotForm />
                   </Tab.Pane>
                 </Tab.Content>
               </Col>
