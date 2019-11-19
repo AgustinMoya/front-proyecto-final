@@ -30,7 +30,7 @@ const toggleButton = (cell, row) => {
   }
 };
 const deleteButton = () => (
-  <button type="button" className="btn btn-primary btn-sm">
+  <button type="button" className="btn btn-danger btn-sm">
     Eliminar el Robot
   </button>
 );
