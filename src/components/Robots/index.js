@@ -14,20 +14,8 @@ class RobotForm extends Component {
       createRobotCode: null,
       deleteRobotMessage: null,
       deleteRobotCode: null,
-      robotToDelete: "",
-      robots: []
+      robotToDelete: ""
     };
-  }
-  getAllRobots = () => {
-    ApiClient.getAllRobots().then(({ data }) => {
-      this.setState({
-        robots: data
-      });
-    });
-  };
-
-  componentDidMount() {
-    this.getAllRobots();
   }
 
   createRobot = pos => {
@@ -70,16 +58,17 @@ class RobotForm extends Component {
       createRobotMessage,
       createRobotCode,
       deleteRobotMessage,
-      deleteRobotCode,
-      robots
+      deleteRobotCode
     } = this.state;
+
+    const { robots, getAllRobots } = this.props;
     const posicion = localStorage.getItem("posicion");
     const platform = localStorage.getItem("platform");
     return (
       <Fragment>
         <Row>
           <Col xs={12}>
-            <RobotsTable robots={robots} getAllRobots={this.getAllRobots} />
+            <RobotsTable robots={robots} getAllRobots={getAllRobots} />
           </Col>
         </Row>
         <hr></hr>

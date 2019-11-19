@@ -222,7 +222,7 @@ const RobotsTable = ({ robots, getAllRobots }) => {
             pagination={paginationFactory(tableOptions(robots))}
           />
           <Row style={{ marginTop: "20px" }}>
-            <Col xs={6}>
+            <Col xs={10}>
               {code >= 200 && code < 300 ? (
                 <Alert variant="success">{message}</Alert>
               ) : code >= 400 && code < 500 ? (

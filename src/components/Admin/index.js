@@ -3,6 +3,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
+import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 
@@ -27,12 +28,14 @@ const INITIAL_STATE = {
   columns: "",
   rows: "",
   deposit: [],
+  robots: [],
   file: null,
   showDeposit: false,
   code: null,
   message: null,
-  prueba: "",
-  errorMessage: null
+  errorMessage: null,
+  stopedAll: false,
+  showModal: false
 };
 
 const leyendas = [
@@ -62,6 +65,7 @@ class AdminPage extends Component {
       });
     });
     this.getDeposit();
+    this.getAllRobots();
   }
 
   componentWillUnmount() {
@@ -136,6 +140,59 @@ class AdminPage extends Component {
         });
       });
   };
+  handleClose = () => {
+    this.setState({
+      showModal: false
+    });
+  };
+  handleShow = () => {
+    this.setState(prevState => ({
+      showModal: true
+    }));
+  };
+
+  stopAllRobotsAction = () => {
+    ApiClient.stopAllRobots()
+      .then(({ data }) => {
+        alert(data);
+        this.setState(prevState => ({
+          stopedAll: !prevState.stopedAll,
+          showModal: false
+        }));
+        this.getAllRobots();
+      })
+      .catch(error => {
+        alert(error.response.data);
+        this.setState(prevState => ({
+          showModal: false
+        }));
+      });
+  };
+  resumeAllRobotsAction = () => {
+    ApiClient.resumeAllRobots()
+      .then(({ data }) => {
+        alert(data);
+        this.setState(prevState => ({
+          stopedAll: !prevState.stopedAll,
+          showModal: false
+        }));
+        this.getAllRobots();
+      })
+      .catch(error => {
+        alert(error.response.data);
+        this.setState(prevState => ({
+          showModal: false
+        }));
+      });
+  };
+
+  getAllRobots = () => {
+    ApiClient.getAllRobots().then(({ data }) => {
+      this.setState({
+        robots: data
+      });
+    });
+  };
   render() {
     const {
       users,
@@ -145,7 +202,10 @@ class AdminPage extends Component {
       showDeposit,
       code,
       message,
-      deposit
+      deposit,
+      stopedAll,
+      showModal,
+      robots
     } = this.state;
 
     return (
@@ -181,7 +241,31 @@ class AdminPage extends Component {
                     <Nav.Link eventKey="robots">Robots</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="prueba">Prueba</Nav.Link>
+                    {!stopedAll ? (
+                      <Button
+                        variant="danger"
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          marginTop: "10px"
+                        }}
+                        onClick={this.handleShow}
+                      >
+                        Parar todo
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="success"
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          marginTop: "10px"
+                        }}
+                        onClick={this.handleShow}
+                      >
+                        Reanudar todo
+                      </Button>
+                    )}
                   </Nav.Item>
                 </Nav>
               </Col>
@@ -211,7 +295,7 @@ class AdminPage extends Component {
                     {deposit.length > 0 ? (
                       <Row>
                         <Col xs={12}>
-                          <h2 style={{ marginBot: "20px" }}>
+                          <h2 style={{ marginBottom: "30px" }}>
                             La estructura del deposito es la siguiente:
                           </h2>
                         </Col>
@@ -307,6 +391,11 @@ class AdminPage extends Component {
                     </Row>
                   </Tab.Pane>
                   <Tab.Pane eventKey="files">
+                    <h4 style={{ marginBottom: "20px" }}>
+                      Para cargar artiuclos en sus torres adjunte un archivo csv
+                      con el siguiente formato: id articulo, id torre y el
+                      estado
+                    </h4>
                     <div class="input-group">
                       <div class="custom-file">
                         <input
@@ -364,11 +453,48 @@ class AdminPage extends Component {
                     </Row>
                   </Tab.Pane>
                   <Tab.Pane eventKey="robots">
-                    <RobotForm />
+                    <RobotForm
+                      robots={robots}
+                      getAllRobots={this.getAllRobots}
+                    />
                   </Tab.Pane>
                 </Tab.Content>
               </Col>
             </Row>
+            {!stopedAll ? (
+              <Modal show={showModal} onHide={this.handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Atencion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>¿Estas seguro que queres frenar todo?</Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={this.handleClose}>
+                    Cerrar
+                  </Button>
+                  <Button variant="danger" onClick={this.stopAllRobotsAction}>
+                    Confirmar
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            ) : (
+              <Modal show={showModal} onHide={this.handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Atencion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>¿Estas seguro que queres reanudar todo?</Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={this.handleClose}>
+                    Cerrar
+                  </Button>
+                  <Button
+                    variant="success"
+                    onClick={this.resumeAllRobotsAction}
+                  >
+                    Confirmar
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            )}
           </Tab.Container>
         )}
       </AuthUserContext.Consumer>
