@@ -14,16 +14,38 @@ import ApiClient from "../../../api-client/index";
 
 const { SearchBar } = Search;
 
-const columnTable = [
+const toggleButton = (cell, row) => {
+  if (row.estado !== "STOP") {
+    return (
+      <button type="button" className="btn btn-warning btn-sm">
+        Frenar el Robot
+      </button>
+    );
+  } else {
+    return (
+      <button type="button" className="btn btn-success btn-sm">
+        Reanudar el Robot
+      </button>
+    );
+  }
+};
+const deleteButton = () => (
+  <button type="button" className="btn btn-primary btn-sm">
+    Eliminar el Robot
+  </button>
+);
+const columnTable = (setMessage, setCode, getAllRobots) => [
   {
     dataField: "id",
     text: "ID de robot",
+    classes: "columnColor",
     headerClasses: "headerColor",
     searchable: false
   },
   {
     dataField: "loc1",
     text: "Ubicacion eje X",
+    classes: "columnColor",
     headerClasses: "headerColor",
     sort: true,
     searchable: true
@@ -31,6 +53,15 @@ const columnTable = [
   {
     dataField: "loc2",
     text: "Ubicacion eje Y",
+    classes: "columnColor",
+    headerClasses: "headerColor",
+    sort: true,
+    searchable: true
+  },
+  {
+    dataField: "estado",
+    text: "Estado del robot",
+    classes: "columnColor",
     headerClasses: "headerColor",
     sort: true,
     searchable: true
@@ -38,25 +69,75 @@ const columnTable = [
   {
     dataField: "actual",
     text: "Posicion actual",
+    classes: "columnColor",
     headerClasses: "headerColor",
     sort: true,
     searchable: false,
     formatter: cell => (cell ? cell : "El robot está en la plataforma")
   },
   {
-    dataField: "estado",
-    text: "Estado del robot",
-    headerClasses: "headerColor",
-    sort: true,
-    searchable: true
-  },
-  {
     dataField: "camino",
     text: "Camino del robot",
+    classes: "columnColor",
     headerClasses: "headerColor",
     sort: true,
     searchable: true,
     formatter: cell => (cell ? cell : "No tiene un camino asignado")
+  },
+  {
+    dataField: "delete",
+    text: "Eliminar",
+    classes: "columnColor",
+    headerClasses: "headerColor",
+    events: {
+      onClick: (e, column, columnIndex, row, rowIndex) => {
+        ApiClient.deleteRobot(row.id)
+          .then(({ data, status }) => {
+            setCode(status);
+            setMessage(data);
+            getAllRobots();
+          })
+          .catch(error => {
+            setCode(error.response.status);
+            setMessage(error.response.data);
+          });
+      }
+    },
+    formatter: deleteButton
+  },
+  {
+    dataField: "stop",
+    text: "Reanudar/Parar",
+    classes: "columnColor",
+    headerClasses: "headerColor",
+    events: {
+      onClick: (e, column, columnIndex, row, rowIndex) => {
+        if (row.estado !== "STOP") {
+          ApiClient.stopRobot(row.id)
+            .then(({ data, status }) => {
+              setCode(status);
+              setMessage(data);
+              getAllRobots();
+            })
+            .catch(error => {
+              setCode(error.response.status);
+              setMessage(error.response.data);
+            });
+        } else {
+          ApiClient.resumeRobot(row.id)
+            .then(({ data, status }) => {
+              setCode(status);
+              setMessage(data);
+              getAllRobots();
+            })
+            .catch(error => {
+              setCode(error.response.status);
+              setMessage(error.response.data);
+            });
+        }
+      }
+    },
+    formatter: toggleButton
   }
 ];
 
@@ -66,7 +147,7 @@ const customTotal = (from, to, size) => (
   </span>
 );
 
-const tableOptions = orders => ({
+const tableOptions = robots => ({
   paginationSize: 4,
   pageStartIndex: 1,
   // alwaysShowAllBtns: true, // Always show next and previous button
@@ -92,7 +173,7 @@ const tableOptions = orders => ({
     },
     {
       text: "Todos",
-      value: orders.length
+      value: robots.length
     }
   ]
 });
@@ -108,21 +189,15 @@ const MyExportCSV = props => {
   );
 };
 
-const RobotsTable = ({ robots }) => {
-  const selectRow = {
-    mode: "radio",
-    clickToSelect: true,
-    style: { backgroundColor: "lightYellow" },
-    headerColumnStyle: {
-      backgroundColor: "#343a40"
-    }
-  };
+const RobotsTable = ({ robots, getAllRobots }) => {
+  const [message, setMessage] = useState(null);
+  const [code, setCode] = useState(null);
   return (
     <ToolkitProvider
       bootstrap4
       keyField="id"
       data={robots}
-      columns={columnTable}
+      columns={columnTable(setMessage, setCode, getAllRobots)}
       search
       exportCSV
     >
@@ -144,9 +219,19 @@ const RobotsTable = ({ robots }) => {
           <BootstrapTable
             {...props.baseProps}
             noDataIndication="La tabla no contiene elementos disponibles"
-            selectRow={selectRow}
             pagination={paginationFactory(tableOptions(robots))}
           />
+          <Row style={{ marginTop: "20px" }}>
+            <Col xs={6}>
+              {code >= 200 && code < 300 ? (
+                <Alert variant="success">{message}</Alert>
+              ) : code >= 400 && code < 500 ? (
+                <Alert variant="warning">{message}</Alert>
+              ) : code === 500 ? (
+                <Alert variant="danger">{message}</Alert>
+              ) : null}
+            </Col>
+          </Row>
         </div>
       )}
     </ToolkitProvider>

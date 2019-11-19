@@ -18,12 +18,16 @@ class RobotForm extends Component {
       robots: []
     };
   }
-  componentDidMount() {
+  getAllRobots = () => {
     ApiClient.getAllRobots().then(({ data }) => {
       this.setState({
         robots: data
       });
     });
+  };
+
+  componentDidMount() {
+    this.getAllRobots();
   }
 
   createRobot = pos => {
@@ -67,8 +71,7 @@ class RobotForm extends Component {
       createRobotCode,
       deleteRobotMessage,
       deleteRobotCode,
-      robots,
-      robotToDelete
+      robots
     } = this.state;
     const posicion = localStorage.getItem("posicion");
     const platform = localStorage.getItem("platform");
@@ -76,7 +79,7 @@ class RobotForm extends Component {
       <Fragment>
         <Row>
           <Col xs={12}>
-            <RobotsTable robots={robots} />
+            <RobotsTable robots={robots} getAllRobots={this.getAllRobots} />
           </Col>
         </Row>
         <hr></hr>
@@ -104,28 +107,10 @@ class RobotForm extends Component {
         <hr></hr>
         <Row>
           <Col xs={6}>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Eliminar robot</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Id del robot a eliminar"
-                name="robotToDelete"
-                value={robotToDelete}
-                onChange={this.onChange}
-              />
-            </div>
-            <button
-              type="submit"
-              class="btn btn-primary"
-              onClick={() => this.deleteRobot(robotToDelete)}
-            >
-              Eliminar robot
-            </button>
-          </Col>
-          <Col xs={6}>
             {deleteRobotCode >= 200 && deleteRobotCode < 300 ? (
               <Alert variant="success">{deleteRobotMessage}</Alert>
+            ) : deleteRobotCode >= 400 && deleteRobotCode < 500 ? (
+              <Alert variant="warning">{deleteRobotMessage}</Alert>
             ) : deleteRobotCode === 500 ? (
               <Alert variant="danger">{deleteRobotMessage}</Alert>
             ) : null}

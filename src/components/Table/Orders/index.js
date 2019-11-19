@@ -94,7 +94,6 @@ const columnTable = (plataforma, setMessage, setCode, handleLiberarPedido) => [
           .catch(error => {
             setCode(error.response.status);
             setMessage(error.response.data);
-            handleLiberarPedido();
           });
       }
     },
@@ -189,16 +188,6 @@ const OrdersTable = ({ orders, plataforma, handleLiberarPedido }) => {
             noDataIndication="La tabla no contiene elementos disponibles"
             pagination={paginationFactory(tableOptions(orders))}
           />
-          <Row style={{ marginTop: "20px", display: "none" }}>
-            <Col xs={12}>
-              <button
-                className="btn btn-secondary"
-                onClick={() => console.log("nada")}
-              >
-                Refrescar
-              </button>
-            </Col>
-          </Row>
           <Row style={{ marginTop: "20px" }}>
             <Col xs={12}>
               {code === 200 ? (

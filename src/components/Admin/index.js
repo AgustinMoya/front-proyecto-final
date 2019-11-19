@@ -166,7 +166,7 @@ class AdminPage extends Component {
               </Col>
             </Row>
             <Row className="borderTabs">
-              <Col sm={3} className="borderRight">
+              <Col sm={2} className="borderRight">
                 <Nav variant="pills" className="flex-column">
                   <Nav.Item>
                     <Nav.Link eventKey="usuarios">Usuarios</Nav.Link>
@@ -185,7 +185,7 @@ class AdminPage extends Component {
                   </Nav.Item>
                 </Nav>
               </Col>
-              <Col sm={9} className="marginAuto">
+              <Col sm={10} className="marginAuto">
                 <Tab.Content>
                   <Tab.Pane eventKey="usuarios">
                     {users.length === 0 ? (
