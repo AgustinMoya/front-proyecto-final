@@ -18,13 +18,14 @@ class RobotForm extends Component {
     };
   }
 
-  createRobot = pos => {
+  createRobot = (pos, getAllRobots) => {
     ApiClient.createRobot({ pos: JSON.parse(pos) })
       .then(({ data, status }) => {
         this.setState({
           createRobotMessage: data,
           createRobotCode: status
         });
+        getAllRobots();
       })
       .catch(error => {
         this.setState({
@@ -74,7 +75,7 @@ class RobotForm extends Component {
             <button
               type="submit"
               class="btn btn-primary"
-              onClick={() => this.createRobot(posicion)}
+              onClick={() => this.createRobot(posicion, getAllRobots)}
             >
               Crear robot
             </button>
