@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Tab from "react-bootstrap/Tab";
@@ -19,6 +19,7 @@ import Alert from "react-bootstrap/Alert";
 
 import UserTable from "../Table/Users";
 import ReadOnlyDeposit from "../Deposit/ReadOnlyDeposit";
+import ModifyDeposit from "../Deposit/ModifyForm";
 
 import styles from "./styles.scss";
 
@@ -35,7 +36,8 @@ const INITIAL_STATE = {
   message: null,
   errorMessage: null,
   stopedAll: false,
-  showModal: false
+  showModal: false,
+  modifyDeposit: false
 };
 
 const leyendas = [
@@ -193,6 +195,11 @@ class AdminPage extends Component {
       });
     });
   };
+  handleModifyDeposit = () => {
+    this.setState({
+      modifyDeposit: true
+    });
+  };
   render() {
     const {
       users,
@@ -205,7 +212,8 @@ class AdminPage extends Component {
       deposit,
       stopedAll,
       showModal,
-      robots
+      robots,
+      modifyDeposit
     } = this.state;
 
     return (
@@ -293,31 +301,69 @@ class AdminPage extends Component {
                   </Tab.Pane>
                   <Tab.Pane eventKey="crearDeposito">
                     {deposit.length > 0 ? (
-                      <Row>
-                        <Col xs={12}>
-                          <h2 style={{ marginBottom: "30px" }}>
-                            La estructura del deposito es la siguiente:
-                          </h2>
-                        </Col>
-                        <Col xs={12} md={4}>
-                          <ReadOnlyDeposit matrix={deposit} />
-                        </Col>
-                        <Col xs={12} md={6}>
-                          <div>
-                            {leyendas.map((leyenda, idx) => {
-                              return (
-                                <div key={idx}>
-                                  <div
-                                    className={`seat ${leyenda.color}`}
-                                    style={{ marginRight: "10px" }}
-                                  />
-                                  <p>{leyenda.description}</p>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </Col>
-                      </Row>
+                      <Fragment>
+                        {!modifyDeposit ? (
+                          <Row>
+                            <Col xs={12}>
+                              <h2 style={{ marginBottom: "30px" }}>
+                                La estructura del deposito es la siguiente:
+                              </h2>
+                            </Col>
+                            <Col xs={12} md={4}>
+                              <ReadOnlyDeposit matrix={deposit} />
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <div>
+                                {leyendas.map((leyenda, idx) => {
+                                  return (
+                                    <div key={idx}>
+                                      <div
+                                        className={`seat ${leyenda.color}`}
+                                        style={{ marginRight: "10px" }}
+                                      />
+                                      <p>{leyenda.description}</p>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <Button
+                                variant="primary"
+                                onClick={this.handleModifyDeposit}
+                              >
+                                Modificar deposito
+                              </Button>
+                            </Col>
+                          </Row>
+                        ) : (
+                          <Row>
+                            <Col xs={12}>
+                              <h2 style={{ marginBottom: "30px" }}>
+                                Modificar deposito:
+                              </h2>
+                            </Col>
+                            <Col xs={12} md={8}>
+                              <ModifyDeposit matrix={deposit} />
+                            </Col>
+                            <Col xs={12} md={4}>
+                              <div>
+                                {leyendas.map((leyenda, idx) => {
+                                  return (
+                                    <div key={idx}>
+                                      <div
+                                        className={`seat ${leyenda.color}`}
+                                        style={{ marginRight: "10px" }}
+                                      />
+                                      <p>{leyenda.description}</p>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </Col>
+                          </Row>
+                        )}
+                      </Fragment>
                     ) : !showDeposit ? (
                       <div>
                         <h5>Cantidad Filas</h5>
@@ -396,11 +442,11 @@ class AdminPage extends Component {
                       con el siguiente formato: id articulo, id torre y el
                       estado
                     </h4>
-                    <div class="input-group">
-                      <div class="custom-file">
+                    <div className="input-group">
+                      <div className="custom-file">
                         <input
                           type="file"
-                          class="custom-file-input"
+                          className="custom-file-input"
                           id="inputGroupFile04"
                           aria-describedby="inputGroupFileAddon04"
                           accept=".csv"
@@ -424,7 +470,7 @@ class AdminPage extends Component {
                       </div>
                       <div class="input-group-append">
                         <button
-                          class="btn btn-primary"
+                          className="btn btn-primary"
                           type="button"
                           id="inputGroupFileAddon04"
                           onClick={this.sendRequest}
