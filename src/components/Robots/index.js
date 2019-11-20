@@ -6,7 +6,14 @@ import ApiClient from "../../api-client/index";
 import Alert from "react-bootstrap/Alert";
 import RobotsTable from "../Table/Robots";
 import ReadOnlyDeposit from "../Deposit/ReadOnlyDeposit";
-
+const leyendas = [
+  { color: "free", description: "Posicion libre" },
+  { color: "initial", description: "Plataforma de descarga" },
+  { color: "tower", description: "Torre de producto" },
+  { color: "blocked", description: "Columna o pared" },
+  { color: "robot", description: "Posicion actual del robot" },
+  { color: "camino", description: "Camino a seguir" }
+];
 class RobotForm extends Component {
   constructor(props) {
     super(props);
@@ -213,6 +220,23 @@ class RobotForm extends Component {
                 ) : errorDepositCode === 500 ? (
                   <Alert variant="danger">{errorDepositMessage}</Alert>
                 ) : null}
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={6}>
+                <div>
+                  {leyendas.map((leyenda, idx) => {
+                    return (
+                      <div key={idx}>
+                        <div
+                          className={`seat ${leyenda.color}`}
+                          style={{ marginRight: "10px" }}
+                        />
+                        <p>{leyenda.description}</p>
+                      </div>
+                    );
+                  })}
+                </div>
               </Col>
             </Row>
             <Row>
