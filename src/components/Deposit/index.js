@@ -22,7 +22,7 @@ const Deposit = ({
   rows,
   confirmDeposit,
   restartDeposit,
-  validateDeposit,
+  validateDeposit
 }) => {
   const [matrix, setMatrix] = useState(initialMatrix(columns, rows));
 
@@ -51,7 +51,7 @@ const Deposit = ({
 
   return (
     <Fragment>
-      <div className="messagePanel">
+      <div className="messagePanel" style={{ margin: "auto" }}>
         {createDeposit(rows, columns).map(estante => estante)}
       </div>
       <Row>

@@ -114,113 +114,165 @@ class ModifyDeposit extends Component {
       columnaIzquierda: prevState.columnaIzquierda - 1
     }));
   };
+
+  cancelModificarDeposito = cancelModifyDeposit => {
+    this.setState({
+      columnaDerecha: 0,
+      columnaIzquierda: 0,
+      filaArriba: 0,
+      filaAbajo: 0
+    });
+    cancelModifyDeposit();
+  };
+
+  validarDeposito = (matrix, validateDeposit) => {
+    validateDeposit(matrix);
+  };
   render() {
     const { matrix } = this.state;
+    const { validateDeposit, confirmDeposit, cancelModifyDeposit } = this.props;
     return (
       <Fragment>
-        <div className="messagePanel">
+        <Row style={{ marginBottom: "30px" }}>
+          <Col>
+            <Button
+              style={{ width: "100%" }}
+              className="marginTop"
+              type="button"
+              variant="success"
+              onClick={() => confirmDeposit(matrix)}
+            >
+              Confirmar depósito
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              style={{ width: "100%" }}
+              className="marginTop"
+              type="button"
+              variant="warning"
+              onClick={() => this.cancelModificarDeposito(cancelModifyDeposit)}
+            >
+              Cancelar modificacion deposito
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              style={{ width: "100%" }}
+              className="marginTop"
+              type="button"
+              variant="info"
+              onClick={() => this.validarDeposito(matrix, validateDeposit)}
+            >
+              Validar deposito
+            </Button>
+          </Col>
+        </Row>
+        <div className="messagePanel" style={{ margin: "auto" }}>
           {this.createDeposit(matrix).map(estante => estante)}
         </div>
-        <Row style={{ marginTop: "20px" }}>
-          <Col xs={12}>
-            <h4>Arriba</h4>
-          </Col>
-          <Col xs={6}>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={() => this.agregarFilaArriba(matrix)}
-            >
-              Agregar fila
-            </button>
-          </Col>
-          <Col xs={6}>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={() => this.eliminarFilaArriba(matrix)}
-              disabled={matrix.length === 2}
-            >
-              Eliminar fila
-            </button>
-          </Col>
-        </Row>
-        <hr />
-        <Row style={{ marginTop: "20px" }}>
-          <Col xs={12}>
-            <h4>Abajo</h4>
-          </Col>
-          <Col xs={6}>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={() => this.agregarFilaAbajo(matrix)}
-            >
-              Agregar fila
-            </button>
-          </Col>
-          <Col xs={6}>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={() => this.eliminarFilaAbajo(matrix)}
-              disabled={matrix.length === 2}
-            >
-              Eliminar fila
-            </button>
-          </Col>
-        </Row>
-        <hr />
-        <Row style={{ marginTop: "20px" }}>
-          <Col xs={12}>
-            <h4>Derecha</h4>
-          </Col>
-          <Col xs={6}>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={() => this.agregarColumnaDerecha(matrix)}
-            >
-              Agregar columna
-            </button>
-          </Col>
-          <Col xs={6}>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={() => this.eliminarColumnaDerecha(matrix)}
-              disabled={matrix[0].length === 2}
-            >
-              Eliminar columna
-            </button>
-          </Col>
-        </Row>
-        <hr />
-        <Row style={{ marginTop: "20px" }}>
-          <Col xs={12}>
-            <h4>Izquierda</h4>
-          </Col>
-          <Col xs={6}>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={() => this.agregarColumnaIzquierda(matrix)}
-            >
-              Agregar columna
-            </button>
-          </Col>
-          <Col xs={6}>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={() => this.eliminarColumnaIzquierda(matrix)}
-              disabled={matrix[0].length === 2}
-            >
-              Eliminar columna
-            </button>
-          </Col>
-        </Row>
-        <hr />
+        <div style={{ marginTop: "30px" }}>
+          <Row style={{ marginTop: "20px" }}>
+            <Col xs={12}>
+              <h4>Arriba</h4>
+            </Col>
+            <Col xs={6}>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => this.agregarFilaArriba(matrix)}
+              >
+                Agregar fila
+              </button>
+            </Col>
+            <Col xs={6}>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => this.eliminarFilaArriba(matrix)}
+                disabled={matrix.length === 2}
+              >
+                Eliminar fila
+              </button>
+            </Col>
+          </Row>
+          <hr />
+          <Row style={{ marginTop: "20px" }}>
+            <Col xs={12}>
+              <h4>Abajo</h4>
+            </Col>
+            <Col xs={6}>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => this.agregarFilaAbajo(matrix)}
+              >
+                Agregar fila
+              </button>
+            </Col>
+            <Col xs={6}>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => this.eliminarFilaAbajo(matrix)}
+                disabled={matrix.length === 2}
+              >
+                Eliminar fila
+              </button>
+            </Col>
+          </Row>
+          <hr />
+          <Row style={{ marginTop: "20px" }}>
+            <Col xs={12}>
+              <h4>Derecha</h4>
+            </Col>
+            <Col xs={6}>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => this.agregarColumnaDerecha(matrix)}
+              >
+                Agregar columna
+              </button>
+            </Col>
+            <Col xs={6}>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => this.eliminarColumnaDerecha(matrix)}
+                disabled={matrix[0].length === 2}
+              >
+                Eliminar columna
+              </button>
+            </Col>
+          </Row>
+          <hr />
+          <Row style={{ marginTop: "20px" }}>
+            <Col xs={12}>
+              <h4>Izquierda</h4>
+            </Col>
+            <Col xs={6}>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => this.agregarColumnaIzquierda(matrix)}
+              >
+                Agregar columna
+              </button>
+            </Col>
+            <Col xs={6}>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => this.eliminarColumnaIzquierda(matrix)}
+                disabled={matrix[0].length === 2}
+              >
+                Eliminar columna
+              </button>
+            </Col>
+          </Row>
+          <hr />
+        </div>
       </Fragment>
     );
   }

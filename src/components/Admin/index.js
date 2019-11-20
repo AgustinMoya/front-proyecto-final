@@ -106,7 +106,6 @@ class AdminPage extends Component {
         });
       })
       .catch(e => {
-        console.log(e.response.data.Message, e.response.status);
         this.setState({
           message: e.response.data.Message,
           code: e.response.status
@@ -114,6 +113,23 @@ class AdminPage extends Component {
       });
   };
 
+  validateMatrixWithScroll = matrix => {
+    ApiClient.validateMatrix(matrix)
+      .then(({ data }) => {
+        this.setState({
+          message: data.Message,
+          code: 200
+        });
+        window.scrollTo(0, document.body.scrollHeight);
+      })
+      .catch(e => {
+        this.setState({
+          message: e.response.data.Message,
+          code: e.response.status
+        });
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+  };
   getDeposit = () => {
     ApiClient.getMatrix().then(({ data }) => {
       this.setState({
@@ -208,6 +224,13 @@ class AdminPage extends Component {
     this.setState({
       modifyDeposit: true
     });
+  };
+
+  cancelModifyDeposit = () => {
+    this.setState({
+      modifyDeposit: false
+    });
+    this.getDeposit();
   };
   render() {
     const {
@@ -354,8 +377,13 @@ class AdminPage extends Component {
                                 Modificar deposito:
                               </h2>
                             </Col>
-                            <Col xs={12} md={8}>
-                              <ModifyDeposit matrix={deposit} />
+                            <Col xs={12} md={4}>
+                              <ModifyDeposit
+                                matrix={deposit}
+                                validateDeposit={this.validateMatrixWithScroll}
+                                confirmDeposit={this.confirmDeposit}
+                                cancelModifyDeposit={this.cancelModifyDeposit}
+                              />
                             </Col>
                             <Col xs={12} md={4}>
                               <div>

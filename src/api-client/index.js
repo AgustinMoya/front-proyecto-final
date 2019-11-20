@@ -19,6 +19,7 @@ class ApiClient {
     createMatrix: "/v1/matrix",
     validateMatrix: "/v1/matrix/validate",
     getMatrix: "/v1/matrix",
+    putMatrix: "/v1/matrix",
     insertCsv: "/v1/articulos/csv",
     getAllRobots: "/v1/robots/all",
     getRobot: idRobot => `/v1/robots?id=${idRobot}`,
@@ -88,6 +89,13 @@ class ApiClient {
         }
       }
     );
+  }
+  modifyMatrix(data) {
+    return this.client.put(this.endpoints.modifyMatrix, data, {
+      headers: {
+        "Content-type": "application/json"
+      }
+    });
   }
 
   validateMatrix(matrix) {

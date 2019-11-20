@@ -24,7 +24,7 @@ const ReadOnlyDeposit = ({ matrix }) => {
   };
 
   return (
-    <div className="messagePanel">
+    <div className="messagePanel" style={{ margin: "auto" }}>
       {createDeposit(matrix).map(estante => estante)}
     </div>
   );
