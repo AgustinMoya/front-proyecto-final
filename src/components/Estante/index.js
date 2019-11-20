@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import classnames from "classnames";
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import styles from "./styles.scss";
 
 const Estante = ({ row, column, handleClick }) => {
@@ -34,27 +34,26 @@ const Estante = ({ row, column, handleClick }) => {
     <OverlayTrigger
       placement="right-start"
       delay={{ show: 100, hide: 100 }}
-      overlay={renderTooltip(row,column)}
-      trigger='hover'
+      overlay={renderTooltip(row, column)}
+      trigger="hover"
     >
-          <div
-            key={column}
-            onClick={() => {
-              toggleSelected();
-            }}
-            className={classnames("seat", selected())}
-          />
+      <div
+        key={column}
+        onClick={() => {
+          toggleSelected();
+        }}
+        className={classnames("seat", selected())}
+      />
     </OverlayTrigger>
-
   );
 };
 const renderTooltip = (row, column) => (
   <div
     style={{
-      backgroundColor: 'rgba(0, 0, 0, 0.85)',
-      padding: '2px 10px',
-      color: 'white',
-      borderRadius: 3,
+      backgroundColor: "rgba(0, 0, 0, 0.85)",
+      padding: "2px 10px",
+      color: "white",
+      borderRadius: 3
     }}
   >
     {`Fila: ${row}, Columna ${column}`}

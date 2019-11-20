@@ -4,8 +4,9 @@ import styles from "../styles.scss";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
 import ReadOnlyEstante from "../../Estante/ReadOnlyEstante/index";
+import ModifyEstante from "../../Estante/ModifyEstante/index";
+import Estante from "../../Estante";
 
 class ModifyDeposit extends Component {
   constructor(props) {
@@ -25,15 +26,19 @@ class ModifyDeposit extends Component {
   };
   createDeposit = matrix => {
     let depositValue = [];
-  
+
     for (let i = 0; i < matrix.length; i++) {
       for (let j = 0; j < matrix[i].length; j++) {
         const seatingStyle = (
-          <ReadOnlyEstante column={j} row={i} value={matrix[i][j]} />
-                    <Estante column={j} row={i} handleClick={updateMatrix} />
+          <ModifyEstante
+            column={j}
+            row={i}
+            value={matrix[i][j]}
+            handleClick={this.updateMatrix}
+          />
         );
         depositValue.push(seatingStyle);
-  
+
         if (j === matrix[i].length - 1) {
           const seatClear = <div className="clearfix" />;
           depositValue.push(seatClear);
@@ -102,7 +107,7 @@ class ModifyDeposit extends Component {
     return (
       <Fragment>
         <div className="messagePanel">
-          {createDeposit(matrix).map(estante => estante)}
+          {this.createDeposit(matrix).map(estante => estante)}
         </div>
         <Row style={{ marginTop: "20px" }}>
           <Col xs={12}>

@@ -23,7 +23,6 @@ const Deposit = ({
   confirmDeposit,
   restartDeposit,
   validateDeposit,
-  clickeable = false
 }) => {
   const [matrix, setMatrix] = useState(initialMatrix(columns, rows));
 
