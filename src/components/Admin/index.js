@@ -97,7 +97,7 @@ class AdminPage extends Component {
     });
   };
   confirmModifyDeposit = matrix => {
-    ApiClient.confirmMatrix(matrix)
+    ApiClient.modifyMessage(matrix)
       .then(({ data, status }) => {
         this.setState({
           modifyCode: status,
@@ -193,7 +193,7 @@ class AdminPage extends Component {
         alert(data);
         this.setState(
           prevState => ({
-            stopedAll: true,
+            stopedAll: !prevState.stopedAll,
             showModal: false
           }),
           () => localStorage.setItem("stopedAll", this.state.stopedAll)
@@ -213,7 +213,7 @@ class AdminPage extends Component {
         alert(data);
         this.setState(
           prevState => ({
-            stopedAll: false,
+            stopedAll: !prevState.stopedAll,
             showModal: false
           }),
           () => localStorage.setItem("stopedAll", this.state.stopedAll)
@@ -277,12 +277,10 @@ class AdminPage extends Component {
       deposit,
       showModal,
       robots,
-      modifyDeposit
+      modifyDeposit,
+      stopedAll
     } = this.state;
 
-    const stopeoTodo = localStorage.getItem("stopedAll")
-      ? localStorage.getItem("stopedAll")
-      : this.state.stopedAll;
     return (
       <AuthUserContext.Consumer>
         {authUser => (
@@ -321,7 +319,7 @@ class AdminPage extends Component {
                     <Nav.Link eventKey="robots">Robots</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    {!stopeoTodo ? (
+                    {!stopedAll ? (
                       <Button
                         variant="danger"
                         style={{
@@ -610,7 +608,7 @@ class AdminPage extends Component {
                 </Tab.Content>
               </Col>
             </Row>
-            {!stopeoTodo ? (
+            {!stopedAll ? (
               <Modal show={showModal} onHide={this.handleClose}>
                 <Modal.Header closeButton>
                   <Modal.Title>Atencion</Modal.Title>
