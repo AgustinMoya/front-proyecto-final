@@ -125,6 +125,15 @@ class ModifyDeposit extends Component {
     cancelModifyDeposit();
   };
 
+  confirmarModificarDeposito = (data, confirmDeposit) => {
+    confirmDeposit(this.state);
+    this.setState({
+      columnaDerecha: 0,
+      columnaIzquierda: 0,
+      filaArriba: 0,
+      filaAbajo: 0
+    });
+  };
   validarDeposito = (matrix, validateDeposit) => {
     validateDeposit(matrix);
   };
@@ -140,7 +149,9 @@ class ModifyDeposit extends Component {
               className="marginTop"
               type="button"
               variant="success"
-              onClick={() => confirmDeposit(this.state)}
+              onClick={() =>
+                this.confirmarModificarDeposito(this.state, confirmDeposit)
+              }
             >
               Confirmar depósito
             </Button>
@@ -279,41 +290,3 @@ class ModifyDeposit extends Component {
 }
 
 export default ModifyDeposit;
-
-/*
-<Row>
-        <Col>
-          <Button
-            style={{ width: "100%" }}
-            className="marginTop"
-            type="button"
-            variant="success"
-            onClick={() => confirmDeposit(matrix)}
-          >
-            Confirmar depósito
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            style={{ width: "100%" }}
-            className="marginTop"
-            type="button"
-            variant="warning"
-            onClick={() => restartDeposit()}
-          >
-            Reiniciar deposito
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            style={{ width: "100%" }}
-            className="marginTop"
-            type="button"
-            variant="info"
-            onClick={() => validateDeposit(matrix)}
-          >
-            Validar deposito
-          </Button>
-        </Col>
-      </Row>
-*/

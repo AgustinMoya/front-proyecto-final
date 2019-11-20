@@ -14,10 +14,23 @@ class RobotForm extends Component {
       createRobotCode: null,
       deleteRobotMessage: null,
       deleteRobotCode: null,
-      robotToDelete: ""
+      robotToDelete: "",
+      time: null
     };
   }
 
+  startTimer() {
+    this.timer = setInterval(
+      () =>
+        this.setState({
+          time: Date.now()
+        }),
+      1000
+    );
+  }
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
   createRobot = (pos, getAllRobots) => {
     ApiClient.createRobot({ pos: JSON.parse(pos) })
       .then(({ data, status }) => {
@@ -59,7 +72,8 @@ class RobotForm extends Component {
       createRobotMessage,
       createRobotCode,
       deleteRobotMessage,
-      deleteRobotCode
+      deleteRobotCode,
+      time
     } = this.state;
 
     const { robots, getAllRobots } = this.props;
@@ -86,6 +100,34 @@ class RobotForm extends Component {
             ) : createRobotCode === 500 ? (
               <Alert variant="danger">{createRobotMessage}</Alert>
             ) : null}
+          </Col>
+        </Row>
+        <hr></hr>
+        <Row>
+          <Col>
+            <span>
+              Indique el id de robot para ver la ubicacion en tiempo real
+            </span>
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Id de robot"
+                aria-label="Id de robot"
+                aria-describedby="button-addon2"
+              />
+
+              <div class="input-group-append" style={{ marginTop: "1rem" }}>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="button-addon2"
+                  onClick={() => this.startTimer()}
+                >
+                  Iniciar timer
+                </button>
+              </div>
+            </div>
           </Col>
         </Row>
         <hr></hr>

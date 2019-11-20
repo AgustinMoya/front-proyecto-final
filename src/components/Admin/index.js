@@ -35,9 +35,7 @@ const INITIAL_STATE = {
   code: null,
   message: null,
   errorMessage: null,
-  stopedAll: localStorage.getItem("stopedAll")
-    ? localStorage.getItem("stopedAll")
-    : false,
+  stopedAll: localStorage.getItem("stopedAll"),
   showModal: false,
   modifyDeposit: false
 };
@@ -156,8 +154,8 @@ class AdminPage extends Component {
     if (this.state.file === null) {
       this.setState({
         errorMessage: "Antes de enviar, es necesario elegir un archivo",
-        message: null,
-        code: null
+        fileMessage: null,
+        fileCode: null
       });
       return;
     }
@@ -167,12 +165,17 @@ class AdminPage extends Component {
 
     ApiClient.insertCsv(formData)
       .then(({ data, status }) => {
-        this.setState({ message: data, code: status, file: null });
+        this.setState({
+          fileMessage: data,
+          fileCode: status,
+          file: null,
+          errorMessage: null
+        });
       })
       .catch(error => {
         this.setState({
-          message: error.response.data,
-          code: error.response.status
+          fileMessage: error.response.data,
+          fileCode: error.response.status
         });
       });
   };
@@ -196,9 +199,11 @@ class AdminPage extends Component {
             stopedAll: !prevState.stopedAll,
             showModal: false
           }),
-          () => localStorage.setItem("stopedAll", this.state.stopedAll)
+          () => {
+            localStorage.setItem("stopedAll", this.state.stopedAll);
+            this.getAllRobots();
+          }
         );
-        this.getAllRobots();
       })
       .catch(error => {
         alert(error.response.data);
@@ -216,9 +221,11 @@ class AdminPage extends Component {
             stopedAll: !prevState.stopedAll,
             showModal: false
           }),
-          () => localStorage.setItem("stopedAll", this.state.stopedAll)
+          () => {
+            localStorage.setItem("stopedAll", this.state.stopedAll);
+            this.getAllRobots();
+          }
         );
-        this.getAllRobots();
       })
       .catch(error => {
         alert(error.response.data);
@@ -313,7 +320,19 @@ class AdminPage extends Component {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="files">Articulos</Nav.Link>
+                    <Nav.Link
+                      eventKey="files"
+                      onClick={() =>
+                        this.setState({
+                          fileMessage: null,
+                          fileCode: null,
+                          file: null,
+                          errorMessage: null
+                        })
+                      }
+                    >
+                      Articulos
+                    </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="robots">Robots</Nav.Link>
@@ -589,15 +608,21 @@ class AdminPage extends Component {
                         </Col>
                       </Row>
                     )}
-                    <Row style={{ marginTop: "20px" }}>
-                      <Col xs={12}>
-                        {this.state.code >= 200 && this.state.code < 300 ? (
-                          <Alert variant="success">{this.state.message}</Alert>
-                        ) : this.state.code === 500 ? (
-                          <Alert variant="danger">{this.state.message}</Alert>
-                        ) : null}
-                      </Col>
-                    </Row>
+                    <div style={{ marginTop: "20px" }}>
+                      {this.state.fileCode >= 200 &&
+                      this.state.fileCode < 300 ? (
+                        <Alert variant="success">
+                          {this.state.fileMessage}
+                        </Alert>
+                      ) : this.state.fileCode >= 400 &&
+                        this.state.fileCode < 500 ? (
+                        <Alert variant="warning">
+                          {this.state.fileMessage}
+                        </Alert>
+                      ) : this.state.fileCode === 500 ? (
+                        <Alert variant="danger">{this.state.fileMessage}</Alert>
+                      ) : null}
+                    </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="robots">
                     <RobotForm
