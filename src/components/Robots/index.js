@@ -69,7 +69,7 @@ class RobotForm extends Component {
         <Row>
           <Col xs={6}>
             <div class="form-group">
-              <span>{`Usted se logueo a la plataforma: ${platform}, el robot se creara en la posicion: ${posicion}`}</span>
+              <span>{`Usted inicio sesion en la plataforma: ${platform}, el robot se creara en la posicion: ${posicion}`}</span>
             </div>
             <button
               type="submit"

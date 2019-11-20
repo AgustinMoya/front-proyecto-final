@@ -19,6 +19,10 @@ import "./styles.scss";
 const ERROR_CODE_ACCOUNT_EXISTS =
   "auth/account-exists-with-different-credential";
 
+const ERROR_CODE_WRONG_PASSWORD = "auth/wrong-password";
+const ERROR_MSG_WRONG_PASSWORD =
+  "La contraseña es invalida o el usuario no existe";
+
 const ERROR_MSG_ACCOUNT_EXISTS = `Datos erroneos, verificar mail o contraseña`;
 
 const SignInPage = () => (
@@ -70,6 +74,9 @@ class SignInFormBase extends Component {
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
+        if (error.code === ERROR_CODE_WRONG_PASSWORD) {
+          error.message = ERROR_MSG_WRONG_PASSWORD;
+        }
         this.setState({ error });
       });
 
@@ -131,7 +138,11 @@ class SignInFormBase extends Component {
         >
           <span>Ingresar</span>
         </button>
-        {error && <Alert variant="danger">{error.message}</Alert>}
+        {error && (
+          <Alert style={{ marginTop: "20px" }} variant="danger">
+            {error.message}
+          </Alert>
+        )}
 
         <p className="mt-5 mb-3 text-muted">© 2019-2019</p>
       </form>

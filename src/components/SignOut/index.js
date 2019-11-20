@@ -10,7 +10,7 @@ const SignOutButton = ({ firebase }) => {
   };
   return (
     <Button onClick={handleClick} variant="danger" style={{ width: "100%" }}>
-      Desloguear
+      Cerrar sesion
     </Button>
   );
 };
