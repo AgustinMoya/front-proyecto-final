@@ -97,7 +97,7 @@ class AdminPage extends Component {
     });
   };
   confirmModifyDeposit = matrix => {
-    ApiClient.modifyMessage(matrix)
+    ApiClient.modifyMatrix(matrix)
       .then(({ data, status }) => {
         this.setState({
           modifyCode: status,
