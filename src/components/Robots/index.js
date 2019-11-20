@@ -67,6 +67,7 @@ class RobotForm extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
   handleClick = idRobot => {
+    clearInterval(this.timer);
     this.startTimer(idRobot);
   };
 
@@ -95,6 +96,7 @@ class RobotForm extends Component {
             });
           })
           .catch(e => {
+            clearInterval(this.timer);
             this.setState({
               errorDepositMessage: e.response.data,
               errorDepositCode: e.response.status,
@@ -103,7 +105,7 @@ class RobotForm extends Component {
           });
       })
       .catch(e => {
-        console.log(e);
+        clearInterval(this.timer);
         this.setState({
           errorRobotMessage: e.response.data,
           errorRobotCode: e.response.status,
