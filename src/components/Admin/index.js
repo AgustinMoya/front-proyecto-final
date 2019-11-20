@@ -432,7 +432,7 @@ class AdminPage extends Component {
                                 Modificar deposito:
                               </h2>
                             </Col>
-                            <Col xs={12} md={4}>
+                            <Col xs={8}>
                               <ModifyDeposit
                                 matrix={deposit}
                                 validateDeposit={this.validateModifyMatrix}
@@ -440,7 +440,7 @@ class AdminPage extends Component {
                                 cancelModifyDeposit={this.cancelModifyDeposit}
                               />
                             </Col>
-                            <Col xs={12} md={4}>
+                            <Col xs={4}>
                               <div>
                                 {leyendas.map((leyenda, idx) => {
                                   return (

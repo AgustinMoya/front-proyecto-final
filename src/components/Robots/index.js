@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 import ApiClient from "../../api-client/index";
 import Alert from "react-bootstrap/Alert";
 import RobotsTable from "../Table/Robots";
+import ReadOnlyDeposit from "../Deposit/ReadOnlyDeposit";
 
 class RobotForm extends Component {
   constructor(props) {
@@ -14,19 +15,18 @@ class RobotForm extends Component {
       createRobotCode: null,
       deleteRobotMessage: null,
       deleteRobotCode: null,
+      errorRobotMessage: null,
+      errorRobotCode: null,
+      errorDepositMessage: null,
+      errorDepositCode: null,
       robotToDelete: "",
-      time: null
+      idRobot: null,
+      caminoRobot: null
     };
   }
 
-  startTimer() {
-    this.timer = setInterval(
-      () =>
-        this.setState({
-          time: Date.now()
-        }),
-      1000
-    );
+  startTimer(idRobot) {
+    this.timer = setInterval(() => this.getRobotRealTime(idRobot), 3000);
   }
   componentWillUnmount() {
     clearInterval(this.timer);
@@ -66,6 +66,51 @@ class RobotForm extends Component {
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+  handleClick = idRobot => {
+    this.startTimer(idRobot);
+  };
+
+  getRobotRealTime = idRobot => {
+    ApiClient.getRobot(idRobot)
+      .then(({ data: robot, status }) => {
+        ApiClient.getMatrix()
+          .then(({ data: deposit, status }) => {
+            const { actual, camino } = robot;
+            const posActual = JSON.parse(actual);
+            const filaPosActual = posActual[0];
+            const columnaPosActual = posActual[1];
+            const caminoASeguir = JSON.parse(camino);
+            caminoASeguir.forEach(element => {
+              let fila = element[0];
+              let columna = element[1];
+              deposit[fila][columna] = 4;
+            });
+            deposit[filaPosActual][columnaPosActual] = 5;
+            this.setState({
+              caminoRobot: deposit,
+              errorDepositMessage: null,
+              errorDepositCode: null,
+              errorRobotMessage: null,
+              errorRobotCode: null
+            });
+          })
+          .catch(e => {
+            this.setState({
+              errorDepositMessage: e.response.data,
+              errorDepositCode: e.response.status,
+              caminoRobot: null
+            });
+          });
+      })
+      .catch(e => {
+        console.log(e);
+        this.setState({
+          errorRobotMessage: e.response.data,
+          errorRobotCode: e.response.status,
+          caminoRobot: null
+        });
+      });
+  };
 
   render() {
     const {
@@ -73,7 +118,12 @@ class RobotForm extends Component {
       createRobotCode,
       deleteRobotMessage,
       deleteRobotCode,
-      time
+      errorRobotMessage,
+      errorRobotCode,
+      errorDepositMessage,
+      errorDepositCode,
+      idRobot,
+      caminoRobot
     } = this.state;
 
     const { robots, getAllRobots } = this.props;
@@ -108,26 +158,57 @@ class RobotForm extends Component {
             <span>
               Indique el id de robot para ver la ubicacion en tiempo real
             </span>
-            <div class="input-group mb-3">
+            <div class="input-group mb-3" style={{ marginTop: "1rem" }}>
               <input
                 type="text"
                 class="form-control"
                 placeholder="Id de robot"
                 aria-label="Id de robot"
                 aria-describedby="button-addon2"
+                name="idRobot"
+                value={this.state.idRobot}
+                onChange={evt => this.onChange(evt)}
               />
 
-              <div class="input-group-append" style={{ marginTop: "1rem" }}>
+              <div class="input-group-append">
                 <button
                   class="btn btn-primary"
                   type="button"
                   id="button-addon2"
-                  onClick={() => this.startTimer()}
+                  onClick={() => this.handleClick(idRobot)}
+                  disabled={this.state.idRobot === null}
                 >
-                  Iniciar timer
+                  Buscar robot
                 </button>
               </div>
             </div>
+            <Row>
+              <Col xs={12}>
+                {errorRobotCode >= 200 && errorRobotCode < 300 ? (
+                  <Alert variant="success">{errorRobotMessage}</Alert>
+                ) : errorRobotCode >= 400 && errorRobotCode < 500 ? (
+                  <Alert variant="warning">{errorRobotMessage}</Alert>
+                ) : errorRobotCode === 500 ? (
+                  <Alert variant="danger">{errorRobotMessage}</Alert>
+                ) : null}
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                {errorDepositCode >= 200 && errorDepositCode < 300 ? (
+                  <Alert variant="success">{errorDepositMessage}</Alert>
+                ) : errorDepositCode >= 400 && errorDepositCode < 500 ? (
+                  <Alert variant="warning">{errorDepositMessage}</Alert>
+                ) : errorDepositCode === 500 ? (
+                  <Alert variant="danger">{errorDepositMessage}</Alert>
+                ) : null}
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                {caminoRobot && <ReadOnlyDeposit matrix={caminoRobot} />}
+              </Col>
+            </Row>
           </Col>
         </Row>
         <hr></hr>

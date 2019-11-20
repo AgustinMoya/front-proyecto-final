@@ -12,6 +12,10 @@ const ReadOnlyEstante = ({ row, column, value }) => {
         return "initial";
       case 3:
         return "blocked";
+      case 4:
+        return "robot";
+      case 5:
+        return "camino";
       default:
         return "free";
     }

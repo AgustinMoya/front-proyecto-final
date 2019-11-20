@@ -43,22 +43,6 @@ const columnTable = (setMessage, setCode, getAllRobots) => [
     searchable: false
   },
   {
-    dataField: "loc1",
-    text: "Ubicacion eje X",
-    classes: "columnColor",
-    headerClasses: "headerColor",
-    sort: true,
-    searchable: true
-  },
-  {
-    dataField: "loc2",
-    text: "Ubicacion eje Y",
-    classes: "columnColor",
-    headerClasses: "headerColor",
-    sort: true,
-    searchable: true
-  },
-  {
     dataField: "estado",
     text: "Estado del robot",
     classes: "columnColor",

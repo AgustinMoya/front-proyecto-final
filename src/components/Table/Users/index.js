@@ -7,12 +7,6 @@ import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
 
 const columnTable = [
   {
-    dataField: "uid",
-    text: "ID de usuario",
-    classes: "columnColor",
-    headerClasses: "headerColor"
-  },
-  {
     dataField: "username",
     text: "Nombre de usuario",
     classes: "columnColor",
@@ -29,7 +23,7 @@ const columnTable = [
 ];
 
 const customTotal = (from, to, size) => (
-  <span className='marginLeft react-bootstrap-table-pagination-total'>
+  <span className="marginLeft react-bootstrap-table-pagination-total">
     Mostrando desde {from} a {to} usuarios de {size}
   </span>
 );
@@ -71,7 +65,7 @@ const UserTable = ({ users }) => (
   <Fragment>
     <BootstrapTable
       bootstrap4
-      keyField='uid'
+      keyField="uid"
       data={users}
       columns={columnTable}
       pagination={paginationFactory(tableOptions(users))}
@@ -79,4 +73,4 @@ const UserTable = ({ users }) => (
   </Fragment>
 );
 
-export default UserTable
+export default UserTable;
