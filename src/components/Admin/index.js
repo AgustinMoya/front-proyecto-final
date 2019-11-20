@@ -96,7 +96,21 @@ class AdminPage extends Component {
       document.location.reload();
     });
   };
-
+  confirmModifyDeposit = matrix => {
+    ApiClient.confirmMatrix(matrix)
+      .then(({ data, status }) => {
+        this.setState({
+          modifyCode: status,
+          modifyMessage: data.Message
+        });
+      })
+      .catch(e => {
+        this.setState({
+          modifyCode: e.response.data.Message,
+          modifyMessage: e.response.status
+        });
+      });
+  };
   validateMatrix = matrix => {
     ApiClient.validateMatrix(matrix)
       .then(({ data }) => {
@@ -113,27 +127,28 @@ class AdminPage extends Component {
       });
   };
 
-  validateMatrixWithScroll = matrix => {
+  validateModifyMatrix = matrix => {
     ApiClient.validateMatrix(matrix)
-      .then(({ data }) => {
+      .then(({ data, status }) => {
         this.setState({
-          message: data.Message,
-          code: 200
+          modifyCode: status,
+          modifyMessage: data.Message
         });
-        window.scrollTo(0, document.body.scrollHeight);
       })
       .catch(e => {
         this.setState({
-          message: e.response.data.Message,
-          code: e.response.status
+          modifyMessage: e.response.data.Message,
+          modifyCode: e.response.status
         });
-        window.scrollTo(0, document.body.scrollHeight);
       });
   };
   getDeposit = () => {
     ApiClient.getMatrix().then(({ data }) => {
       this.setState({
-        deposit: data
+        deposit: data,
+        modifyCode: null,
+        modifyMessage: null,
+        modifyDeposit: false
       });
     });
   };
@@ -228,9 +243,27 @@ class AdminPage extends Component {
 
   cancelModifyDeposit = () => {
     this.setState({
-      modifyDeposit: false
+      modifyDeposit: false,
+      modifyMessage: null,
+      modifyCode: null
     });
     this.getDeposit();
+  };
+
+  modifyDeposit = data => {
+    ApiClient.modifyMatrix(data)
+      .then(({ data }) => {
+        this.setState({
+          depositMessage: data.Message,
+          depositCode: 200
+        });
+      })
+      .catch(e => {
+        this.setState({
+          depositMessage: e.response.data.Message,
+          depositCode: e.response.status
+        });
+      });
   };
   render() {
     const {
@@ -274,7 +307,12 @@ class AdminPage extends Component {
                     <Nav.Link eventKey="usuarios">Usuarios</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="crearDeposito">Deposito</Nav.Link>
+                    <Nav.Link
+                      eventKey="crearDeposito"
+                      onClick={() => this.getDeposit()}
+                    >
+                      Deposito
+                    </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="files">Articulos</Nav.Link>
@@ -380,8 +418,8 @@ class AdminPage extends Component {
                             <Col xs={12} md={4}>
                               <ModifyDeposit
                                 matrix={deposit}
-                                validateDeposit={this.validateMatrixWithScroll}
-                                confirmDeposit={this.confirmDeposit}
+                                validateDeposit={this.validateModifyMatrix}
+                                confirmDeposit={this.confirmModifyDeposit}
                                 cancelModifyDeposit={this.cancelModifyDeposit}
                               />
                             </Col>
@@ -400,6 +438,25 @@ class AdminPage extends Component {
                                 })}
                               </div>
                             </Col>
+                            <Row style={{ marginTop: "20px" }}>
+                              <Col xs={12}>
+                                {this.state.modifyCode >= 200 &&
+                                this.state.modifyCode < 300 ? (
+                                  <Alert variant="success">
+                                    {this.state.modifyMessage}
+                                  </Alert>
+                                ) : this.state.modifyCode >= 400 &&
+                                  this.state.modifyCode < 500 ? (
+                                  <Alert variant="warning">
+                                    {this.state.modifyMessage}
+                                  </Alert>
+                                ) : this.state.modifyCode === 500 ? (
+                                  <Alert variant="danger">
+                                    {this.state.modifyMessage}
+                                  </Alert>
+                                ) : null}
+                              </Col>
+                            </Row>
                           </Row>
                         )}
                       </Fragment>
