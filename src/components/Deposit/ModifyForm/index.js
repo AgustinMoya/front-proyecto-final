@@ -140,7 +140,7 @@ class ModifyDeposit extends Component {
               className="marginTop"
               type="button"
               variant="success"
-              onClick={() => confirmDeposit(matrix)}
+              onClick={() => confirmDeposit(this.state)}
             >
               Confirmar depósito
             </Button>

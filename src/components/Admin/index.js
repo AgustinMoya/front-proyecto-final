@@ -106,8 +106,8 @@ class AdminPage extends Component {
       })
       .catch(e => {
         this.setState({
-          modifyCode: e.response.data,
-          modifyMessage: e.response.status
+          modifyCode: e.response.status,
+          modifyMessage: e.response.data
         });
       });
   };

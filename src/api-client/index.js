@@ -91,7 +91,7 @@ class ApiClient {
     );
   }
   modifyMatrix(data) {
-    return this.client.put(this.endpoints.modifyMatrix, data, {
+    return this.client.put(this.endpoints.putMatrix, data, {
       headers: {
         "Content-type": "application/json"
       }
