@@ -101,12 +101,12 @@ class AdminPage extends Component {
       .then(({ data, status }) => {
         this.setState({
           modifyCode: status,
-          modifyMessage: data.Message
+          modifyMessage: data
         });
       })
       .catch(e => {
         this.setState({
-          modifyCode: e.response.data.Message,
+          modifyCode: e.response.data,
           modifyMessage: e.response.status
         });
       });
