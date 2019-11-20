@@ -25,7 +25,6 @@ const SignInPage = () => (
   <div className="form-signin">
     <Image src={logo} fluid />
     <SignInForm />
-    <SignInGoogle />
     <PasswordForgetLink />
     <SignUpLink />
   </div>

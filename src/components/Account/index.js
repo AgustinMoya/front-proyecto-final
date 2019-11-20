@@ -32,9 +32,6 @@ const AccountPage = () => (
           <span>{authUser.email}</span>
         </div>
         <hr />
-        <h4>Recuperar contraseña</h4>
-        <PasswordForgetForm />
-        <hr />
         <h4>Cambiar contraseña</h4>
         <PasswordChangeForm />
       </div>

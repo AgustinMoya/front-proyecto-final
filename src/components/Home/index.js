@@ -87,19 +87,6 @@ class HomePage extends Component {
     });
   }
 
-  deletePedido = idPedido => {
-    ApiClient.deletePedido(idPedido)
-      .then(() => {
-        this.obtenerPedidos();
-      })
-      .catch(error => {
-        this.setState({
-          errorMessage: error.response.data.message,
-          errorCode: error.response.status
-        });
-      });
-  };
-
   getDeposit = () => {
     ApiClient.getMatrix().then(({ data }) => {
       this.setState({
@@ -116,6 +103,7 @@ class HomePage extends Component {
       });
     });
   };
+
   postTorre = selected => {
     const platform =
       this.props.platformValue || localStorage.getItem("platform");
@@ -187,7 +175,7 @@ class HomePage extends Component {
           </Col>
           <Col sm={10} className="marginAuto">
             <Tab.Content>
-              <Tab.Pane eventKey="pedidos">
+              <Tab.Pane eventKey="pedidos" onClick={this.obtenerPedidos}>
                 {isLoadingPedidos ? (
                   <center>
                     <Button variant="outline-dark" disabled>

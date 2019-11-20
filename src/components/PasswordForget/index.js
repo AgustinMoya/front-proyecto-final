@@ -41,7 +41,10 @@ class PasswordForgetFormBase extends Component {
     this.props.firebase
       .doPasswordReset(email)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
+        this.setState({
+          ...INITIAL_STATE,
+          successMessage: "Se envio un mail con los pasos a seguir"
+        });
       })
       .catch(error => {
         console.log("error firebase", error);
@@ -51,7 +54,7 @@ class PasswordForgetFormBase extends Component {
         if (error.code === ERROR_CODE_BAD_FORMAT) {
           error.message = ERROR_MSG_BAD_FORMAT;
         }
-        
+
         this.setState({ error });
       });
 
@@ -63,7 +66,7 @@ class PasswordForgetFormBase extends Component {
   };
 
   render() {
-    const { email, error } = this.state;
+    const { email, error, successMessage } = this.state;
 
     const isInvalid = email === "";
 
@@ -91,6 +94,7 @@ class PasswordForgetFormBase extends Component {
         </button>
 
         {error && <Alert variant="danger">{error.message}</Alert>}
+        {successMessage && <Alert variant="success">{successMessage}</Alert>}
       </form>
     );
   }

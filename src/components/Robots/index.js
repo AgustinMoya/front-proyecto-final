@@ -67,12 +67,6 @@ class RobotForm extends Component {
     return (
       <Fragment>
         <Row>
-          <Col xs={12}>
-            <RobotsTable robots={robots} getAllRobots={getAllRobots} />
-          </Col>
-        </Row>
-        <hr></hr>
-        <Row>
           <Col xs={6}>
             <div class="form-group">
               <span>{`Usted se logueo a la plataforma: ${platform}, el robot se creara en la posicion: ${posicion}`}</span>
@@ -91,6 +85,12 @@ class RobotForm extends Component {
             ) : createRobotCode === 500 ? (
               <Alert variant="danger">{createRobotMessage}</Alert>
             ) : null}
+          </Col>
+        </Row>
+        <hr></hr>
+        <Row>
+          <Col xs={12}>
+            <RobotsTable robots={robots} getAllRobots={getAllRobots} />
           </Col>
         </Row>
         <hr></hr>

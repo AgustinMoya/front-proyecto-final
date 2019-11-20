@@ -35,7 +35,9 @@ const INITIAL_STATE = {
   code: null,
   message: null,
   errorMessage: null,
-  stopedAll: false,
+  stopedAll: localStorage.getItem("stopedAll")
+    ? localStorage.getItem("stopedAll")
+    : false,
   showModal: false,
   modifyDeposit: false
 };
@@ -91,6 +93,7 @@ class AdminPage extends Component {
         code: 200,
         message: data.Message
       });
+      document.location.reload();
     });
   };
 
@@ -157,10 +160,13 @@ class AdminPage extends Component {
     ApiClient.stopAllRobots()
       .then(({ data }) => {
         alert(data);
-        this.setState(prevState => ({
-          stopedAll: !prevState.stopedAll,
-          showModal: false
-        }));
+        this.setState(
+          prevState => ({
+            stopedAll: !prevState.stopedAll,
+            showModal: false
+          }),
+          () => localStorage.setItem("stopedAll", this.state.stopedAll)
+        );
         this.getAllRobots();
       })
       .catch(error => {
@@ -174,10 +180,13 @@ class AdminPage extends Component {
     ApiClient.resumeAllRobots()
       .then(({ data }) => {
         alert(data);
-        this.setState(prevState => ({
-          stopedAll: !prevState.stopedAll,
-          showModal: false
-        }));
+        this.setState(
+          prevState => ({
+            stopedAll: !prevState.stopedAll,
+            showModal: false
+          }),
+          () => localStorage.setItem("stopedAll", this.state.stopedAll)
+        );
         this.getAllRobots();
       })
       .catch(error => {
@@ -216,6 +225,9 @@ class AdminPage extends Component {
       modifyDeposit
     } = this.state;
 
+    const stopeoTodo = localStorage.getItem("stopedAll")
+      ? localStorage.getItem("stopedAll")
+      : this.state.stopedAll;
     return (
       <AuthUserContext.Consumer>
         {authUser => (
@@ -249,7 +261,7 @@ class AdminPage extends Component {
                     <Nav.Link eventKey="robots">Robots</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    {!stopedAll ? (
+                    {!stopeoTodo ? (
                       <Button
                         variant="danger"
                         style={{
@@ -259,7 +271,7 @@ class AdminPage extends Component {
                         }}
                         onClick={this.handleShow}
                       >
-                        Parar todo
+                        Frenar operatoria
                       </Button>
                     ) : (
                       <Button
@@ -271,7 +283,7 @@ class AdminPage extends Component {
                         }}
                         onClick={this.handleShow}
                       >
-                        Reanudar todo
+                        Reanudar operatoria
                       </Button>
                     )}
                   </Nav.Item>
@@ -375,6 +387,9 @@ class AdminPage extends Component {
                           value={rows}
                           onChange={this.onChange}
                         />
+                        <small class="form-text text-muted">
+                          El valor de las filas debe ser mayor o igual a dos
+                        </small>
                         <h5 className="marginTop">Cantidad Columnas</h5>
                         <input
                           className="form-control"
@@ -384,11 +399,16 @@ class AdminPage extends Component {
                           value={columns}
                           onChange={this.onChange}
                         />
+                        <small class="form-text text-muted">
+                          El valor de las columnas debe ser mayor o igual a dos
+                        </small>
+
                         <Button
                           className="marginTop"
                           variant="success"
                           type="button"
                           onClick={this.createDeposit}
+                          disabled={rows < 2 || columns < 2}
                         >
                           Crear Deposito
                         </Button>
@@ -438,7 +458,7 @@ class AdminPage extends Component {
                   </Tab.Pane>
                   <Tab.Pane eventKey="files">
                     <h4 style={{ marginBottom: "20px" }}>
-                      Para cargar artiuclos en sus torres adjunte un archivo csv
+                      Para cargar articulos en sus torres adjunte un archivo csv
                       con el siguiente formato: id articulo, id torre y el
                       estado
                     </h4>
@@ -446,9 +466,6 @@ class AdminPage extends Component {
                       <div className="custom-file">
                         <input
                           type="file"
-                          className="custom-file-input"
-                          id="inputGroupFile04"
-                          aria-describedby="inputGroupFileAddon04"
                           accept=".csv"
                           onChange={evt =>
                             this.setState({
@@ -507,7 +524,7 @@ class AdminPage extends Component {
                 </Tab.Content>
               </Col>
             </Row>
-            {!stopedAll ? (
+            {!stopeoTodo ? (
               <Modal show={showModal} onHide={this.handleClose}>
                 <Modal.Header closeButton>
                   <Modal.Title>Atencion</Modal.Title>

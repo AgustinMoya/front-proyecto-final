@@ -12,7 +12,11 @@ class ModifyDeposit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      matrix: props.matrix
+      matrix: props.matrix,
+      columnaDerecha: 0,
+      columnaIzquierda: 0,
+      filaArriba: 0,
+      filaAbajo: 0
     };
   }
   updateMatrix = (row, column, flag) => {
@@ -51,56 +55,64 @@ class ModifyDeposit extends Component {
     var nuevaFila = new Array(matrix[0].length);
     nuevaFila.fill(0);
     matrix.push(nuevaFila);
-    this.setState({
-      matrix: matrix
-    });
+    this.setState(prevState => ({
+      matrix: matrix,
+      filaAbajo: prevState.filaAbajo + 1
+    }));
   };
 
   eliminarFilaAbajo = matrix => {
     matrix.pop();
-    this.setState({
-      matrix: matrix
-    });
+    this.setState(prevState => ({
+      matrix: matrix,
+      filaAbajo: prevState.filaAbajo - 1
+    }));
   };
 
   agregarColumnaDerecha = matrix => {
     matrix.forEach(element => element.push(0));
-    this.setState({
-      matrix: matrix
-    });
+    this.setState(prevState => ({
+      matrix: matrix,
+      columnaDerecha: prevState.columnaDerecha + 1
+    }));
   };
   eliminarColumnaDerecha = matrix => {
     matrix.forEach(element => element.pop());
-    this.setState({
-      matrix: matrix
-    });
+    this.setState(prevState => ({
+      matrix: matrix,
+      columnaDerecha: prevState.columnaDerecha - 1
+    }));
   };
 
   agregarFilaArriba = matrix => {
     var nuevaFila = new Array(matrix[0].length);
     nuevaFila.fill(0);
     matrix.unshift(nuevaFila);
-    this.setState({
-      matrix: matrix
-    });
+    this.setState(prevState => ({
+      matrix: matrix,
+      filaArriba: prevState.filaArriba + 1
+    }));
   };
   eliminarFilaArriba = matrix => {
     matrix.shift();
-    this.setState({
-      matrix: matrix
-    });
+    this.setState(prevState => ({
+      matrix: matrix,
+      filaArriba: prevState.filaArriba - 1
+    }));
   };
   agregarColumnaIzquierda = matrix => {
     matrix.forEach(element => element.unshift(0));
-    this.setState({
-      matrix: matrix
-    });
+    this.setState(prevState => ({
+      matrix: matrix,
+      columnaIzquierda: prevState.columnaIzquierda + 1
+    }));
   };
   eliminarColumnaIzquierda = matrix => {
     matrix.forEach(element => element.shift());
-    this.setState({
-      matrix: matrix
-    });
+    this.setState(prevState => ({
+      matrix: matrix,
+      columnaIzquierda: prevState.columnaIzquierda - 1
+    }));
   };
   render() {
     const { matrix } = this.state;
@@ -127,6 +139,7 @@ class ModifyDeposit extends Component {
               type="button"
               class="btn btn-primary"
               onClick={() => this.eliminarFilaArriba(matrix)}
+              disabled={matrix.length === 2}
             >
               Eliminar fila
             </button>
@@ -151,6 +164,7 @@ class ModifyDeposit extends Component {
               type="button"
               class="btn btn-primary"
               onClick={() => this.eliminarFilaAbajo(matrix)}
+              disabled={matrix.length === 2}
             >
               Eliminar fila
             </button>
@@ -175,6 +189,7 @@ class ModifyDeposit extends Component {
               type="button"
               class="btn btn-primary"
               onClick={() => this.eliminarColumnaDerecha(matrix)}
+              disabled={matrix[0].length === 2}
             >
               Eliminar columna
             </button>
@@ -199,6 +214,7 @@ class ModifyDeposit extends Component {
               type="button"
               class="btn btn-primary"
               onClick={() => this.eliminarColumnaIzquierda(matrix)}
+              disabled={matrix[0].length === 2}
             >
               Eliminar columna
             </button>

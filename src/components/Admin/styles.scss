@@ -5,7 +5,7 @@
 .marginTop {
   margin-top: 15px;
 }
-.marginLeft{
+.marginLeft {
   margin-left: 10px;
 }
 .inlineGrid {
@@ -18,17 +18,21 @@
   display: block;
 }
 .columnColor {
-  background-color:#fff;
+  background-color: #fff;
   font-size: 90%;
 }
 .headerColor {
-   background-color: #343a40!important;
+  background-color: #343a40 !important;
   color: white;
   font-size: 80%;
 }
 .nonSelectableColor {
-  background-color: lightyellow!important;
+  background-color: lightyellow !important;
 }
 .paginationItem {
   padding: 6px 12px;
+}
+
+.custom-file-label::after {
+  content: "Buscar"!important;
 }
