@@ -33,6 +33,6 @@
   padding: 6px 12px;
 }
 
-.custom-file-label::after {
-  content: "Buscar"!important;
+.custom-file-input:lang(es) ~ .custom-file-label::after {
+  content: "Buscar";
 }

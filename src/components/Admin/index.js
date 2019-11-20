@@ -162,7 +162,7 @@ class AdminPage extends Component {
         alert(data);
         this.setState(
           prevState => ({
-            stopedAll: !prevState.stopedAll,
+            stopedAll: true,
             showModal: false
           }),
           () => localStorage.setItem("stopedAll", this.state.stopedAll)
@@ -182,7 +182,7 @@ class AdminPage extends Component {
         alert(data);
         this.setState(
           prevState => ({
-            stopedAll: !prevState.stopedAll,
+            stopedAll: false,
             showModal: false
           }),
           () => localStorage.setItem("stopedAll", this.state.stopedAll)
@@ -219,7 +219,6 @@ class AdminPage extends Component {
       code,
       message,
       deposit,
-      stopedAll,
       showModal,
       robots,
       modifyDeposit
@@ -255,7 +254,7 @@ class AdminPage extends Component {
                     <Nav.Link eventKey="crearDeposito">Deposito</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="files">Productos</Nav.Link>
+                    <Nav.Link eventKey="files">Articulos</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="robots">Robots</Nav.Link>
@@ -339,7 +338,7 @@ class AdminPage extends Component {
                                 })}
                               </div>
                             </Col>
-                            <Col xs={12} md={6}>
+                            <Col xs={12} md={6} style={{ marginTop: "30px" }}>
                               <Button
                                 variant="primary"
                                 onClick={this.handleModifyDeposit}
@@ -462,23 +461,25 @@ class AdminPage extends Component {
                       con el siguiente formato: id articulo, id torre y el
                       estado
                     </h4>
-                    <div className="input-group">
-                      <div className="custom-file">
+                    <div class="input-group">
+                      <div class="custom-file">
                         <input
+                          lang="es"
                           type="file"
                           accept=".csv"
+                          class="custom-file-input"
+                          id="inputGroupFile04"
+                          aria-describedby="inputGroupFileAddon04"
                           onChange={evt =>
                             this.setState({
                               file: evt.target.files[0],
                               errorMessage: null
                             })
                           }
-                          lang="es"
                           onClick={event => {
                             event.target.value = null;
                           }}
                         />
-
                         <label class="custom-file-label" for="inputGroupFile04">
                           {this.state.file
                             ? this.state.file.name
