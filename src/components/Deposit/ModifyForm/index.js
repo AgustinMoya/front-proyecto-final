@@ -182,12 +182,20 @@ class ModifyDeposit extends Component {
             <h4>Izquierda</h4>
           </Col>
           <Col xs={6}>
-            <button type="button" class="btn btn-primary">
+            <button
+              type="button"
+              class="btn btn-primary"
+              onClick={() => this.agregarColumnaIzquierda(matrix)}
+            >
               Agregar columna
             </button>
           </Col>
           <Col xs={6}>
-            <button type="button" class="btn btn-primary">
+            <button
+              type="button"
+              class="btn btn-primary"
+              onClick={() => this.eliminarColumnaDerecha(matrix)}
+            >
               Eliminar columna
             </button>
           </Col>
