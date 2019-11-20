@@ -74,35 +74,44 @@ class RobotForm extends Component {
   getRobotRealTime = idRobot => {
     ApiClient.getRobot(idRobot)
       .then(({ data: robot, status }) => {
-        ApiClient.getMatrix()
-          .then(({ data: deposit, status }) => {
-            const { actual, camino } = robot;
-            const posActual = JSON.parse(actual);
-            const filaPosActual = posActual[0];
-            const columnaPosActual = posActual[1];
-            const caminoASeguir = JSON.parse(camino);
-            caminoASeguir.forEach(element => {
-              let fila = element[0];
-              let columna = element[1];
-              deposit[fila][columna] = 4;
+        if (robot.actual !== null && robot.camino !== null) {
+          ApiClient.getMatrix()
+            .then(({ data: deposit, status }) => {
+              const { actual, camino } = robot;
+              const posActual = JSON.parse(actual);
+              const filaPosActual = posActual[0];
+              const columnaPosActual = posActual[1];
+              const caminoASeguir = JSON.parse(camino);
+              caminoASeguir.forEach(element => {
+                let fila = element[0];
+                let columna = element[1];
+                deposit[fila][columna] = 4;
+              });
+              deposit[filaPosActual][columnaPosActual] = 5;
+              this.setState({
+                caminoRobot: deposit,
+                errorDepositMessage: null,
+                errorDepositCode: null,
+                errorRobotMessage: null,
+                errorRobotCode: null
+              });
+            })
+            .catch(e => {
+              clearInterval(this.timer);
+              this.setState({
+                errorDepositMessage: e.response.data,
+                errorDepositCode: e.response.status,
+                caminoRobot: null
+              });
             });
-            deposit[filaPosActual][columnaPosActual] = 5;
-            this.setState({
-              caminoRobot: deposit,
-              errorDepositMessage: null,
-              errorDepositCode: null,
-              errorRobotMessage: null,
-              errorRobotCode: null
-            });
-          })
-          .catch(e => {
-            clearInterval(this.timer);
-            this.setState({
-              errorDepositMessage: e.response.data,
-              errorDepositCode: e.response.status,
-              caminoRobot: null
-            });
+        } else {
+          clearInterval(this.timer);
+          this.setState({
+            errorRobotMessage: "El robot no tiene un camino asignado",
+            errorRobotCode: 500,
+            caminoRobot: null
           });
+        }
       })
       .catch(e => {
         clearInterval(this.timer);
