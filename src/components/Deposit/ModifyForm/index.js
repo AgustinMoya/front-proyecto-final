@@ -7,25 +7,6 @@ import Col from "react-bootstrap/Col";
 
 import ReadOnlyEstante from "../../Estante/ReadOnlyEstante/index";
 
-const createDeposit = matrix => {
-  let depositValue = [];
-
-  for (let i = 0; i < matrix.length; i++) {
-    for (let j = 0; j < matrix[i].length; j++) {
-      const seatingStyle = (
-        <ReadOnlyEstante column={j} row={i} value={matrix[i][j]} />
-      );
-      depositValue.push(seatingStyle);
-
-      if (j === matrix[i].length - 1) {
-        const seatClear = <div className="clearfix" />;
-        depositValue.push(seatClear);
-      }
-    }
-  }
-  return depositValue;
-};
-
 class ModifyDeposit extends Component {
   constructor(props) {
     super(props);
@@ -42,7 +23,25 @@ class ModifyDeposit extends Component {
       };
     });
   };
-
+  createDeposit = matrix => {
+    let depositValue = [];
+  
+    for (let i = 0; i < matrix.length; i++) {
+      for (let j = 0; j < matrix[i].length; j++) {
+        const seatingStyle = (
+          <ReadOnlyEstante column={j} row={i} value={matrix[i][j]} />
+                    <Estante column={j} row={i} handleClick={updateMatrix} />
+        );
+        depositValue.push(seatingStyle);
+  
+        if (j === matrix[i].length - 1) {
+          const seatClear = <div className="clearfix" />;
+          depositValue.push(seatClear);
+        }
+      }
+    }
+    return depositValue;
+  };
   agregarFilaAbajo = matrix => {
     var nuevaFila = new Array(matrix[0].length);
     nuevaFila.fill(0);
@@ -194,7 +193,7 @@ class ModifyDeposit extends Component {
             <button
               type="button"
               class="btn btn-primary"
-              onClick={() => this.eliminarColumnaDerecha(matrix)}
+              onClick={() => this.eliminarColumnaIzquierda(matrix)}
             >
               Eliminar columna
             </button>
