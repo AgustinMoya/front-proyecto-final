@@ -116,6 +116,7 @@ class HomePage extends Component {
           towerMessage: data,
           towerErrorCode: status
         });
+        this.obtenerPedidos()
       })
       .catch(error => {
         this.setState({
@@ -175,7 +176,7 @@ class HomePage extends Component {
           </Col>
           <Col sm={10} className="marginAuto">
             <Tab.Content>
-              <Tab.Pane eventKey="pedidos" onClick={this.obtenerPedidos}>
+              <Tab.Pane eventKey="pedidos" onClick={() => this.obtenerPedidos()}>
                 {isLoadingPedidos ? (
                   <center>
                     <Button variant="outline-dark" disabled>
