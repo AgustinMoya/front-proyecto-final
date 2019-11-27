@@ -20,6 +20,10 @@ const ERROR_CODE_ACCOUNT_EXISTS =
   "auth/account-exists-with-different-credential";
 
 const ERROR_CODE_WRONG_PASSWORD = "auth/wrong-password";
+
+const ERROR_USER_NOT_FOUND = "auth/user-not-found";
+const ERROR_MSG = `Datos erroneos, verificar mail o contraseña`;
+
 const ERROR_MSG_WRONG_PASSWORD =
   "La contraseña es invalida o el usuario no existe";
 
@@ -74,8 +78,12 @@ class SignInFormBase extends Component {
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
-        if (error.code === ERROR_CODE_WRONG_PASSWORD) {
-          error.message = ERROR_MSG_WRONG_PASSWORD;
+        console.log(error);
+        if (
+          error.code === ERROR_CODE_WRONG_PASSWORD ||
+          error.code === ERROR_USER_NOT_FOUND
+        ) {
+          error.message = ERROR_MSG;
         }
         this.setState({ error });
       });
@@ -95,7 +103,7 @@ class SignInFormBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <h1 className="h3 mb-3 font-weight-normal">Por favor, ingresá</h1>
+        <h1 className="h3 mb-3 font-weight-normal">Por favor, ingresa</h1>
         <label htmlFor="inputEmail" className="sr-only">
           Correo electrónico
         </label>

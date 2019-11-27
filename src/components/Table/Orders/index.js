@@ -20,11 +20,29 @@ const prueba = (from, to, size) => (
 );
 const columnTable = (plataforma, setMessage, setCode, handleLiberarPedido) => [
   {
+    dataField: "id_orden_compra",
+    text: "Orden de compra",
+    classes: "columnColor",
+    headerClasses: "headerColor",
+    sort: true,
+    searchable: true,
+    formatter: cell => (cell ? cell : "No hay articulo asociado")
+  },
+  
+  {
     dataField: "id",
     text: "ID de pedido",
     classes: "columnColor",
     headerClasses: "headerColor",
     searchable: false
+  },
+  {
+    dataField: "estado",
+    text: "Estado pedido",
+    classes: "columnColor",
+    headerClasses: "headerColor",
+    sort: true,
+    searchable: true
   },
   {
     dataField: "id_articulo",
@@ -36,14 +54,6 @@ const columnTable = (plataforma, setMessage, setCode, handleLiberarPedido) => [
     formatter: cell => (cell ? cell : "No hay articulo asociado")
   },
   {
-    dataField: "id_torre",
-    text: "ID de torre",
-    classes: "columnColor",
-    headerClasses: "headerColor",
-    sort: true,
-    searchable: false
-  },
-  {
     dataField: "name",
     text: "Nombre de producto",
     classes: "columnColor",
@@ -53,21 +63,12 @@ const columnTable = (plataforma, setMessage, setCode, handleLiberarPedido) => [
     formatter: cell => (cell ? cell : "No hay articulo asociado")
   },
   {
-    dataField: "id_orden_compra",
-    text: "Orden de compra",
+    dataField: "id_torre",
+    text: "ID de torre",
     classes: "columnColor",
     headerClasses: "headerColor",
     sort: true,
-    searchable: true,
-    formatter: cell => (cell ? cell : "No hay articulo asociado")
-  },
-  {
-    dataField: "estado",
-    text: "Estado pedido",
-    classes: "columnColor",
-    headerClasses: "headerColor",
-    sort: true,
-    searchable: true
+    searchable: false
   },
   {
     dataField: "id_robot",

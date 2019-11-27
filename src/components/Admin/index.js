@@ -426,37 +426,16 @@ class AdminPage extends Component {
                             </Col>
                           </Row>
                         ) : (
-                          <Row>
-                            <Col xs={12}>
-                              <h2 style={{ marginBottom: "30px" }}>
-                                Modificar deposito:
-                              </h2>
-                            </Col>
-                            <Col xs={8}>
-                              <ModifyDeposit
-                                matrix={deposit}
-                                validateDeposit={this.validateModifyMatrix}
-                                confirmDeposit={this.confirmModifyDeposit}
-                                cancelModifyDeposit={this.cancelModifyDeposit}
-                              />
-                            </Col>
-                            <Col xs={4}>
-                              <div>
-                                {leyendas.map((leyenda, idx) => {
-                                  return (
-                                    <div key={idx}>
-                                      <div
-                                        className={`seat ${leyenda.color}`}
-                                        style={{ marginRight: "10px" }}
-                                      />
-                                      <p>{leyenda.description}</p>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </Col>
-                            <Row style={{ marginTop: "20px" }}>
+                          <div>
+                            <Row>
                               <Col xs={12}>
+                                <h2 style={{ marginBottom: "30px" }}>
+                                  Modificar deposito:
+                                </h2>
+                              </Col>
+                            </Row>
+                            <Row >
+                              <Col xs={8}>
                                 {this.state.modifyCode >= 200 &&
                                 this.state.modifyCode < 300 ? (
                                   <Alert variant="success">
@@ -474,7 +453,32 @@ class AdminPage extends Component {
                                 ) : null}
                               </Col>
                             </Row>
-                          </Row>
+                            <Row>
+                              <Col xs={8}>
+                                <ModifyDeposit
+                                  matrix={deposit}
+                                  validateDeposit={this.validateModifyMatrix}
+                                  confirmDeposit={this.confirmModifyDeposit}
+                                  cancelModifyDeposit={this.cancelModifyDeposit}
+                                />
+                              </Col>
+                              <Col xs={4}>
+                                <div>
+                                  {leyendas.map((leyenda, idx) => {
+                                    return (
+                                      <div key={idx}>
+                                        <div
+                                          className={`seat ${leyenda.color}`}
+                                          style={{ marginRight: "10px" }}
+                                        />
+                                        <p>{leyenda.description}</p>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </Col>
+                            </Row>
+                          </div>
                         )}
                       </Fragment>
                     ) : !showDeposit ? (

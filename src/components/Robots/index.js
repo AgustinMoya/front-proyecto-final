@@ -92,9 +92,9 @@ class RobotForm extends Component {
               caminoASeguir.forEach(element => {
                 let fila = element[0];
                 let columna = element[1];
-                deposit[fila][columna] = 4;
+                deposit[fila][columna] = 5;
               });
-              deposit[filaPosActual][columnaPosActual] = 5;
+              deposit[filaPosActual][columnaPosActual] = 4;
               this.setState({
                 caminoRobot: deposit,
                 errorDepositMessage: null,
