@@ -56,12 +56,14 @@ class RobotForm extends Component {
   };
 
   deleteRobot = idRobot => {
+    const { getAllRobots } = this.props;
     ApiClient.deleteRobot(idRobot)
       .then(({ data, status }) => {
         this.setState({
           deleteRobotMessage: data,
           deleteRobotCode: status
         });
+        getAllRobots();
       })
       .catch(error => {
         this.setState({
@@ -79,6 +81,7 @@ class RobotForm extends Component {
   };
 
   getRobotRealTime = idRobot => {
+    const { getAllRobots } = this.props;
     ApiClient.getRobot(idRobot)
       .then(({ data: robot, status }) => {
         if (robot.actual !== null && robot.camino !== null) {
@@ -102,6 +105,7 @@ class RobotForm extends Component {
                 errorRobotMessage: null,
                 errorRobotCode: null
               });
+              getAllRobots();
             })
             .catch(e => {
               clearInterval(this.timer);
