@@ -154,7 +154,7 @@ class HomePage extends Component {
           <Col sm={2} className="borderRight">
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
-                <Nav.Link eventKey="pedidos" onClick={this.getAllPedidos}>
+                <Nav.Link eventKey="pedidos" onClick={this.obtenerPedidos}>
                   Ver pedidos
                 </Nav.Link>
               </Nav.Item>
