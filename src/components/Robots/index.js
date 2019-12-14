@@ -227,7 +227,7 @@ class RobotForm extends Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={6}>
+              <Col xs={4}>
                 <div>
                   {leyendas.map((leyenda, idx) => {
                     return (
@@ -242,9 +242,7 @@ class RobotForm extends Component {
                   })}
                 </div>
               </Col>
-            </Row>
-            <Row>
-              <Col>
+              <Col xs={3} style={{ display: "flex" }}>
                 {caminoRobot && <ReadOnlyDeposit matrix={caminoRobot} />}
               </Col>
             </Row>
