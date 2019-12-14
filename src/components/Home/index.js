@@ -116,7 +116,7 @@ class HomePage extends Component {
           towerMessage: data,
           towerErrorCode: status
         });
-        this.obtenerPedidos()
+        this.obtenerPedidos();
       })
       .catch(error => {
         this.setState({
@@ -154,7 +154,9 @@ class HomePage extends Component {
           <Col sm={2} className="borderRight">
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
-                <Nav.Link eventKey="pedidos">Ver pedidos</Nav.Link>
+                <Nav.Link eventKey="pedidos" onClick={this.getAllPedidos}>
+                  Ver pedidos
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="deposito" onClick={this.getDeposit}>
@@ -176,7 +178,10 @@ class HomePage extends Component {
           </Col>
           <Col sm={10} className="marginAuto">
             <Tab.Content>
-              <Tab.Pane eventKey="pedidos" onClick={() => this.obtenerPedidos()}>
+              <Tab.Pane
+                eventKey="pedidos"
+                onClick={() => this.obtenerPedidos()}
+              >
                 {isLoadingPedidos ? (
                   <center>
                     <Button variant="outline-dark" disabled>
