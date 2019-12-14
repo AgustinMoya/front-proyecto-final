@@ -128,6 +128,7 @@ const TowersTable = ({ towers, platformValue, postTorre }) => {
           />
 
           <button
+            style={{ marginTop: "20px" }}
             className="btn btn-primary"
             disabled={selected.length === 0}
             onClick={() => {
