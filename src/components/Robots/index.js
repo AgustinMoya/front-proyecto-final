@@ -33,7 +33,7 @@ class RobotForm extends Component {
   }
 
   startTimer(idRobot) {
-    this.timer = setInterval(() => this.getRobotRealTime(idRobot), 3000);
+    this.timer = setInterval(() => this.getRobotRealTime(idRobot), 1000);
   }
   componentWillUnmount() {
     clearInterval(this.timer);
